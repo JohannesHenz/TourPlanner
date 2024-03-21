@@ -1,16 +1,120 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.tourplanner.HelloController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.tourplanner.HelloController">
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
-</VBox>
+    <!-- Top Menu Bar -->
+    <top>
+        <MenuBar>
+            <menus>
+                <Menu text="File">
+                    <items>
+                        <MenuItem text="Open"/>
+                        <MenuItem text="Save"/>
+                        <MenuItem text="Exit"/>
+                    </items>
+                </Menu>
+                <Menu text="Edit">
+                    <!-- Other menu items -->
+                </Menu>
+                <!-- Other menus -->
+            </menus>
+        </MenuBar>
+    </top>
+
+    <!-- Search Bar -->
+    <center>
+        <HBox>
+            <BorderPane.margin>
+                <Insets top="10" right="10" bottom="10" left="10" />
+            </BorderPane.margin>
+            <children>
+                <TextField promptText="Search"/>
+            </children>
+        </HBox>
+    </center>
+
+    <!-- Left Section for Tours -->
+    <left>
+        <VBox BorderPane.alignment="CENTER_LEFT">
+            <BorderPane.margin>
+                <Insets top="10" right="10" bottom="10" left="10" />
+            </BorderPane.margin>
+            <children>
+                <Label text="Tours"/>
+                <ListView fx:id="tourList">
+                    <!-- List of tours -->
+                </ListView>
+                <HBox>
+                    <children>
+                        <Button text="+"/>
+                        <Button text="Edit"/>
+                        <Button text="Delete"/>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </left>
+
+    <!-- Tabs -->
+    <center>
+        <TabPane BorderPane.alignment="CENTER">
+            <tabs>
+                <Tab text="General">
+                    <!-- General content -->
+                </Tab>
+                <Tab text="Route">
+                    <!-- Route content -->
+                </Tab>
+                <Tab text="Misc">
+                    <!-- Misc content -->
+                </Tab>
+            </tabs>
+        </TabPane>
+    </center>
+
+    <!-- Map Area -->
+    <right>
+        <Pane BorderPane.alignment="CENTER_RIGHT">
+            <!-- Map content -->
+        </Pane>
+    </right>
+
+    <!-- Tour Logs Section -->
+    <bottom>
+        <VBox BorderPane.alignment="BOTTOM_LEFT">
+            <BorderPane.margin>
+                <Insets top="10" right="10" bottom="10" left="10" />
+            </BorderPane.margin>
+            <children>
+                <Label text="Tour Logs"/>
+                <TableView>
+                    <columns>
+                        <TableColumn text="Date"/>
+                        <TableColumn text="Duration"/>
+                        <TableColumn text="Distance"/>
+                    </columns>
+                </TableView>
+                <HBox>
+                    <children>
+                        <Button text="Add"/>
+                        <Button text="Edit"/>
+                        <Button text="Delete"/>
+                    </children>
+                </HBox>
+                <ScrollPane>
+                    <!-- Scrollable content -->
+                    <content>
+                        <TextArea text="Vestibulum at eros"/>
+                    </content>
+                </ScrollPane>
+            </children>
+        </VBox>
+    </bottom>
+
+</BorderPane>
