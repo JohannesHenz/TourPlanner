@@ -1,44 +1,92 @@
 package com.example.tourplanner;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
 
 public class Tour {
-    private StringProperty name;
-    private ObjectProperty<Image> image;
+    private String name;
+    private String description;
+    private String from;
+    private String to;
+    private String transportType;
+    private double distance;
+    private double estimatedTime;
+    private Image routeInformation;
 
-    public Tour(String name, Image image) {
-        this.name = new SimpleStringProperty(name);
-        this.image = new SimpleObjectProperty<>(image);
+    public Tour(String name) {
+        this.name = name;
     }
 
-    public StringProperty nameProperty() {
+    public String toString(){
         return name;
     }
 
+    public Tour(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+    // Getters and setters for all properties
+
     public String getName() {
-        return name.get();
+        return name;
     }
 
     public void setName(String name) {
-        this.name.set(name);
+        this.name = name;
     }
 
-    public ObjectProperty<Image> imageProperty() {
-        return image;
+    public String getDescription() {
+        return description;
     }
 
-    public Image getImage() {
-        return image.get();
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public void setImage(Image image) {
-        this.image.set(image);
+    public String getFrom() {
+        return from;
     }
 
+    public void setFrom(String from) {
+        this.from = from;
+    }
 
-    // getters and setters
+    public String getTo() {
+        return to;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
+    }
+
+    public String getTransportType() {
+        return transportType;
+    }
+
+    public void setTransportType(String transportType) {
+        this.transportType = transportType;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    public double getEstimatedTime() {
+        return estimatedTime;
+    }
+
+    public void setEstimatedTime(double estimatedTime) {
+        this.estimatedTime = estimatedTime;
+    }
+
+    public Image getRouteInformation() {
+        return routeInformation;
+    }
+
+    public void setRouteInformation(Image routeInformation) {
+        this.routeInformation = routeInformation;
+    }
 }

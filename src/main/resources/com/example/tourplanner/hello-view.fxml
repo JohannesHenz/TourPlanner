@@ -34,7 +34,7 @@
                 <Insets top="10" right="10" bottom="10" left="10" />
             </BorderPane.margin>
             <children>
-                <TextField promptText="Search" fx:id="tourNameField"/>
+                <TextField promptText="Search"/>
             </children>
         </HBox>
     </center>
@@ -52,9 +52,9 @@
                 </ListView>
                 <HBox>
                     <children>
-                        <Button text="Add" onAction="#onAddTourButtonClick"/>
-                        <Button text="Edit" onAction="#onEditTourButtonClick"/>
-                        <Button text="Delete" onAction="#onDeleteTourButtonClick"/>
+                        <Button text="+" onAction="#addTour"/>
+                        <Button text="Edit" />
+                        <Button text="Delete" onAction="#deleteTour"/>
                     </children>
                 </HBox>
             </children>
@@ -93,14 +93,18 @@
             </BorderPane.margin>
             <children>
                 <Label text="Tour Logs"/>
-                <ListView fx:id="tourLogList">
-                    <!-- List of tour logs -->
-                </ListView>
+                <TableView>
+                    <columns>
+                        <TableColumn text="Date"/>
+                        <TableColumn text="Duration"/>
+                        <TableColumn text="Distance"/>
+                    </columns>
+                </TableView>
                 <HBox>
                     <children>
-                        <Button text="Add" onAction="#onAddTourLogButtonClick"/>
-                        <Button text="Edit" onAction="#onEditTourLogButtonClick"/>
-                        <Button text="Delete" onAction="#onDeleteTourLogButtonClick"/>
+                        <Button text="Add"/>
+                        <Button text="Edit"/>
+                        <Button text="Delete"/>
                     </children>
                 </HBox>
                 <ScrollPane>
