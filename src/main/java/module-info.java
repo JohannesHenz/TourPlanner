@@ -4,6 +4,6 @@ module com.example.tourplanner {
 
     requires org.kordamp.bootstrapfx.core;
 
-    opens com.example.tourplanner to javafx.fxml;
-    exports com.example.tourplanner;
+    opens com.FHTW.tourplanner to javafx.fxml;
+    exports com.FHTW.tourplanner;
 }
