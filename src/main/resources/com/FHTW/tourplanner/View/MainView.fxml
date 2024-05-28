@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.FHTW.tourplanner.Controller.MainController">
+  <TableView fx:id="tourTable">
+    <columns>
+      <TableColumn fx:id="nameColumn" text="Name" />
+      <TableColumn fx:id="descriptionColumn" text="Description" />
+      <!-- Additional columns -->
+    </columns>
+  </TableView>
+  <Button text="Add Tour"  />
+</VBox>

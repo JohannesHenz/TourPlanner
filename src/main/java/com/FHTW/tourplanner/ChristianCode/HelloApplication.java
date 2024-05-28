@@ -1,4 +1,4 @@
-package com.FHTW.tourplanner;
+package com.FHTW.tourplanner.ChristianCode;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

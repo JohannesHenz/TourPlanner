@@ -1,5 +1,19 @@
 package com.FHTW.tourplanner.Model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
 public class TourLog {
-    //Enhance to fully represent the log's data structure
+    private LocalDateTime dateTime;
+    private String comment;
+    private String difficulty;
+    private int totalDistance;
+    private int totalTime;
+    private int rating;
+
+
 }
