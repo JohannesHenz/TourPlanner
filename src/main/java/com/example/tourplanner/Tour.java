@@ -1,6 +1,11 @@
 package com.example.tourplanner;
 
 import javafx.scene.image.Image;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.scene.image.Image;
 
 public class Tour {
     private String name;
