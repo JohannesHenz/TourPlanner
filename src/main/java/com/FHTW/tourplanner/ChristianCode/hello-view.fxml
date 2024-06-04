@@ -6,7 +6,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.tourplanner.HelloController">
+            fx:controller="com.FHTW.tourplanner.ChristianCode.HelloController">
 
     <!-- Top Menu Bar -->
     <top>

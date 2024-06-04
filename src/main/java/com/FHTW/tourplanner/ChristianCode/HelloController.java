@@ -1,15 +1,16 @@
-package com.example.tourplanner;
+package com.FHTW.tourplanner.ChristianCode;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+<<<<<<< HEAD:src/main/java/com/example/tourplanner/HelloController.java
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
+=======
+>>>>>>> 759f379290b406b4b78cf9fd582b08e4535f7a3d:src/main/java/com/FHTW/tourplanner/ChristianCode/HelloController.java
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;

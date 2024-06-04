@@ -1,4 +1,4 @@
-package com.example.tourplanner;
+package com.FHTW.tourplanner.ChristianCode;
 
 import javafx.scene.image.Image;
 import javafx.beans.property.ObjectProperty;
