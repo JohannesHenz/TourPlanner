@@ -1,0 +1,32 @@
+[
+  {
+    "id": "1",
+    "name": "City Highlights",
+    "description": "A tour of the main attractions in the city.",
+    "from": "Central Station",
+    "to": "Old Town",
+    "transportType": "Bus",
+    "distance": 10.5,
+    "estimatedTime": 2.0
+  },
+  {
+    "id": "2",
+    "name": "Mountain Adventure",
+    "description": "An exciting adventure to the mountain top.",
+    "from": "Base Camp",
+    "to": "Summit",
+    "transportType": "Hiking",
+    "distance": 15.0,
+    "estimatedTime": 0.0
+  },
+  {
+    "id": "3",
+    "name": "River Cruise",
+    "description": "A relaxing cruise along the river.",
+    "from": "Pier 1",
+    "to": "Pier 2",
+    "transportType": "Boat",
+    "distance": 0.0,
+    "estimatedTime": 3.0
+  }
+]

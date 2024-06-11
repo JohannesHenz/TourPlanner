@@ -22,9 +22,9 @@ public class TourInputController {
         // For example:
         String name = nameField.getText();
         // Get other input fields and create a Tour object
-        Tour newTour = new Tour(name);
+        //Tour newTour = new Tour(name);
         // Add the tour to the tour manager
-        tourManager.addTour(newTour);
+        //tourManager.addTour(newTour);
     }
 
     @FXML

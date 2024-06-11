@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.tourplanner.HelloController">
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tourplanner.HelloController">
 
     <!-- Top Menu Bar -->
     <top>
@@ -14,9 +26,9 @@
             <menus>
                 <Menu text="File">
                     <items>
-                        <MenuItem text="Open"/>
-                        <MenuItem text="Save"/>
-                        <MenuItem text="Exit"/>
+                        <MenuItem text="Open" />
+                        <MenuItem text="Save" />
+                        <MenuItem text="Exit" />
                     </items>
                 </Menu>
                 <Menu text="Edit">
@@ -31,11 +43,8 @@
     <center>
         <HBox>
             <BorderPane.margin>
-                <Insets top="10" right="10" bottom="10" left="10" />
+                <Insets bottom="10" left="10" right="10" top="10" />
             </BorderPane.margin>
-            <children>
-                <TextField promptText="Search"/>
-            </children>
         </HBox>
     </center>
 
@@ -43,18 +52,18 @@
     <left>
         <VBox BorderPane.alignment="CENTER_LEFT">
             <BorderPane.margin>
-                <Insets top="10" right="10" bottom="10" left="10" />
+                <Insets bottom="10" left="10" right="10" top="10" />
             </BorderPane.margin>
             <children>
-                <Label text="Tours"/>
+                <Label text="Tours" />
                 <ListView fx:id="tourList">
                     <!-- List of tours -->
                 </ListView>
                 <HBox>
                     <children>
-                        <Button text="+" onAction="#addTour"/>
-                        <Button text="Edit" />
-                        <Button text="Delete" onAction="#deleteTour"/>
+                        <Button onAction="#addTour" text="+" />
+                        <Button onAction="#editTour" text="Edit" />
+                        <Button onAction="#deleteTour" text="Delete" />
                     </children>
                 </HBox>
             </children>
@@ -69,8 +78,17 @@
                     <!-- General content -->
                 </Tab>
                 <Tab text="Route">
-                    <!-- Route content -->
-                </Tab>
+               <content>
+                    <Pane prefHeight="329.0" prefWidth="784.0">
+                     <children>
+                        <ImageView fitHeight="349.0" fitWidth="784.0" layoutX="60.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../Capture.JPG" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+               </content></Tab>
                 <Tab text="Misc">
                     <!-- Misc content -->
                 </Tab>
@@ -78,41 +96,32 @@
         </TabPane>
     </center>
 
-    <!-- Map Area -->
-    <right>
-        <Pane BorderPane.alignment="CENTER_RIGHT">
-            <!-- Map content -->
-        </Pane>
-    </right>
-
     <!-- Tour Logs Section -->
     <bottom>
         <VBox BorderPane.alignment="BOTTOM_LEFT">
             <BorderPane.margin>
-                <Insets top="10" right="10" bottom="10" left="10" />
+                <Insets bottom="10" left="10" right="10" top="10" />
             </BorderPane.margin>
             <children>
-                <Label text="Tour Logs"/>
-                <TableView>
+                <Label text="Tour Logs" />
+                <TableView fx:id="tourLogTable">
                     <columns>
-                        <TableColumn text="Date"/>
-                        <TableColumn text="Duration"/>
-                        <TableColumn text="Distance"/>
+                        <TableColumn fx:id="dateColumn" prefWidth="150" text="Date" />
+                        <TableColumn fx:id="timeColumn" prefWidth="150" text="Time" />
+                        <TableColumn fx:id="commentColumn" prefWidth="250" text="Comment" />
+                        <TableColumn fx:id="difficultyColumn" prefWidth="150" text="Difficulty" />
+                        <TableColumn fx:id="totalDistanceColumn" prefWidth="150" text="Total Distance" />
+                        <TableColumn fx:id="totalTimeColumn" prefWidth="150" text="Total Time" />
+                        <TableColumn fx:id="ratingColumn" prefWidth="150" text="Rating" />
                     </columns>
                 </TableView>
                 <HBox>
                     <children>
-                        <Button text="Add"/>
-                        <Button text="Edit"/>
-                        <Button text="Delete"/>
+                        <Button onAction="#onAddTourLogButtonClick" text="Add" />
+                        <Button onAction="#onEditTourLogButtonClick" text="Edit" />
+                        <Button onAction="#onDeleteTourLogButtonClick" text="Delete" />
                     </children>
                 </HBox>
-                <ScrollPane>
-                    <!-- Scrollable content -->
-                    <content>
-                        <TextArea text="Vestibulum at eros"/>
-                    </content>
-                </ScrollPane>
             </children>
         </VBox>
     </bottom>

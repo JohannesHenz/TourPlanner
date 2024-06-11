@@ -14,18 +14,25 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import java.time.LocalDate;
 
 public class HelloController {
+    private static final HelloController instance = new HelloController();
+    //die offizielle tourliste, hier hängen (später trigger dran für adden removen etc)
+    private TourManager manager = TourManager.getInstance();
+    //die offizielle tourLoglist
+    private TourLogManager logManager = TourLogManager.getInstance();
+    //die tourlist für den view
     @FXML
     private ListView<Tour> tourList;
     @FXML
     private TextField tourImageField;
-    @FXML
-    private ObservableList<Tour> tours;
-    @FXML
-    private ListView<TourLog> tourLogList;
     @FXML
     private TextField tourLogDescriptionField;
     @FXML
@@ -33,38 +40,122 @@ public class HelloController {
     @FXML
     private ObservableList<TourLog> tourLogs;
     @FXML
-    private Tour SelectedTour;
+    private ObjectProperty<Tour> selectedTour = new SimpleObjectProperty<>();
+    @FXML
+    private TourLog SelectedTourLog;
 
-    public Tour GetSelectedTour(){
-        return SelectedTour;
+    @FXML
+    private TableView<TourLog> tourLogTable;
+    @FXML
+    private TableColumn<TourLog, LocalDate> dateColumn;
+    @FXML
+    private TableColumn<TourLog, Float> timeColumn;
+    @FXML
+    private TableColumn<TourLog, String> commentColumn;
+    @FXML
+    private TableColumn<TourLog, Float> difficultyColumn;
+    @FXML
+    private TableColumn<TourLog, Float> totalDistanceColumn;
+    @FXML
+    private TableColumn<TourLog, Float> totalTimeColumn;
+    @FXML
+    private TableColumn<TourLog, Float> ratingColumn;
+
+    public Tour getSelectedTour(){
+        return selectedTour.get();
+    }
+    public void setSelectedTour(Tour tour) {
+        selectedTour.set(tour);
+    }
+    public ObjectProperty<Tour> selectedTourProperty() {
+        return selectedTour;
     }
 
-    public void initialize() {
-        // Ensure tourList and tourLogList are not null
-        if (tourList != null && tourLogList != null) {
-            // Initialize tours and tourLogs
-            tours = FXCollections.observableArrayList();
-            tourLogs = FXCollections.observableArrayList();
+    public TourLog getSelectedTourLog(){
+        return SelectedTourLog;
+    }
 
+    public void initialize() { //hier setzen wir die internen tours auf die des managers. die logs holen wir on demand später
             // Set items for tourList and tourLogList
-            tourList.setItems(tours);
-            tourLogList.setItems(tourLogs);
-        } else {
-            // Handle the case where tourList or tourLogList is null
-            System.err.println("tourList or tourLogList is null");
+            tourList.setItems(manager.getTours());
+            /*List<TourLog> filteredTourLogs = logManager.getTourLogs().stream()
+                .filter(log -> log.getTour().equals(SelectedTour))
+                .collect(Collectors.toList());
+
+            tourLogs = FXCollections.observableArrayList(filteredTourLogs);*/
+            tourLogs = logManager.getTourLogs();
+        for (Tour tour : tourList.getItems()) {
+            System.out.println(tour.getName());
+        }
+
+        if(!(dateColumn==null || timeColumn==null ||commentColumn==null ||difficultyColumn==null ||totalDistanceColumn==null ||totalTimeColumn==null ||ratingColumn==null)) {
+            dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+            timeColumn.setCellValueFactory(new PropertyValueFactory<>("time"));
+            commentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
+            difficultyColumn.setCellValueFactory(new PropertyValueFactory<>("difficulty"));
+            totalDistanceColumn.setCellValueFactory(new PropertyValueFactory<>("totalDistance"));
+            totalTimeColumn.setCellValueFactory(new PropertyValueFactory<>("totalTime"));
+            ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        }
+        tourList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                setSelectedTour(newValue);
+                updateLogList();
+            }
+        });
+        selectedTour.addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                List<TourLog> filteredTourLogs = logManager.getTourLogs().stream()
+                        .filter(log -> log.getTour().equals(newValue))
+                        .collect(Collectors.toList());
+                tourLogs = FXCollections.observableArrayList(filteredTourLogs);
+                tourLogTable.setItems(tourLogs);
+            }
+        });
+    }
+
+    public static HelloController getInstance() {
+        return instance;
+    }
+
+    @FXML
+    public void addToList(Tour tour){
+        if(tourList!=null)
+            tourList.getItems().add(tour);
+    }
+
+    @FXML
+    public void updateList(){
+        if(tourList!=null)
+            tourList.setItems(manager.getTours());
+    }
+
+    @FXML
+    public void addToLogList(TourLog log){
+        if(tourLogs!=null) {
+            tourLogs.add(log);
+            tourLogTable.setItems(tourLogs);
         }
     }
 
     @FXML
-    private void addTour() { //hervorragender Template für edit später :P
-        SelectedTour = new Tour("New Tour");
-        tourList.getItems().add(SelectedTour);
+    public void updateLogList(){
+        if (selectedTour.get() != null) {
+            List<TourLog> filteredTourLogs = logManager.getTourLogs().stream()
+                    .filter(log -> log.getTour().equals(selectedTour.get()))
+                    .collect(Collectors.toList());
+            tourLogs = FXCollections.observableArrayList(filteredTourLogs);
+            tourLogTable.setItems(tourLogs);
+        }
+    }
 
+    @FXML
+    private void addTour() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AddPopup.fxml"));
             Parent root1 = fxmlLoader.load();
             PopupController controller = fxmlLoader.getController();
-            controller.initData(SelectedTour);
+            controller.initData(tourList.getSelectionModel().getSelectedItem(), false);
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
             stage.show();
@@ -74,14 +165,19 @@ public class HelloController {
         }
     }
 
-
     @FXML
     private void editTour() {
-        // Implement editing a tour functionality here
-        // You can get the selected item from the list view and modify it
-        Tour selectedTour = tourList.getSelectionModel().getSelectedItem();
-        if (selectedTour != null) {
-            // Implement editing functionality here
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AddPopup.fxml"));
+            Parent root1 = fxmlLoader.load();
+            PopupController controller = fxmlLoader.getController();
+            controller.initData(tourList.getSelectionModel().getSelectedItem(), true);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root1));
+            stage.show();
+        }
+        catch (Exception e){
+            System.out.println("Cant load new window");
         }
     }
 
@@ -91,71 +187,50 @@ public class HelloController {
         // You can get the selected item from the list view and remove it
         Tour selectedTour = tourList.getSelectionModel().getSelectedItem();
         if (selectedTour != null) {
-            tourList.getItems().remove(selectedTour);
+            manager.deleteTour(selectedTour);
         }
     }
 
-
-    @FXML
-    protected void onDeleteTourButtonClick() {
-        Tour selectedTour = tourList.getSelectionModel().getSelectedItem();
-
-        if (selectedTour != null) {
-            // Delete selected tour
-            tours.remove(selectedTour);
-        }
-    }
 
     @FXML
     protected void onAddTourLogButtonClick() {
-        String description = tourLogDescriptionField.getText();
-        LocalDate date = LocalDate.parse(tourLogDateField.getText());
-
-        // Validate user input
-        if (description == null || description.isEmpty() || date == null) {
-            // Show error message
-            return;
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AddLogPopup.fxml"));
+            Parent root1 = fxmlLoader.load();
+            LogPopupController controller = fxmlLoader.getController();
+            controller.initData(tourLogTable.getSelectionModel().getSelectedItem(), tourList.getSelectionModel().getSelectedItem(), false);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root1));
+            stage.show();
         }
-
-        // Add new tour log
-        tourLogs.add(new TourLog(description, date));
-
-        // Clear input fields
-        tourLogDescriptionField.clear();
-        tourLogDateField.clear();
+        catch (Exception e){
+            System.out.println("Cant load new window");
+        }
+        System.out.println(selectedTour.getValue().getChildFriendliness());
     }
 
     @FXML
     protected void onEditTourLogButtonClick() {
-        TourLog selectedTourLog = tourLogList.getSelectionModel().getSelectedItem();
-
-        if (selectedTourLog != null) {
-            String description = tourLogDescriptionField.getText();
-            LocalDate date = LocalDate.parse(tourLogDateField.getText());
-
-            // Validate user input
-            if (description == null || description.isEmpty() || date == null) {
-                // Show error message
-                return;
-            }
-
-            // Update selected tour log
-            selectedTourLog.setDescription(description);
-            selectedTourLog.setDate(date);
-
-            // Clear input fields
-            tourLogDescriptionField.clear();
-            tourLogDateField.clear();
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AddLogPopup.fxml"));
+            Parent root1 = fxmlLoader.load();
+            LogPopupController controller = fxmlLoader.getController();
+            controller.initData(tourLogTable.getSelectionModel().getSelectedItem(), tourList.getSelectionModel().getSelectedItem(), true);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root1));
+            stage.show();
+        }
+        catch (Exception e){
+            System.out.println("Cant load new window");
         }
     }
 
     @FXML
     protected void onDeleteTourLogButtonClick() {
-        TourLog selectedTourLog = tourLogList.getSelectionModel().getSelectedItem();
-
+        TourLog selectedTourLog = tourLogTable.getSelectionModel().getSelectedItem();
         if (selectedTourLog != null) {
-            // Delete selected tour log
-            tourLogs.remove(selectedTourLog);
+            //tourLogTable.getItems().remove(selectedTourLog);
+            logManager.deleteTourLog(selectedTourLog);
         }
     }
 }

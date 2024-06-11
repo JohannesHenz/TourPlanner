@@ -13,14 +13,14 @@
          <font>
             <Font size="33.0" />
          </font>
+         <!-- Invisible label to request focus, so that the setText wont interfere with it-->
+         <Label fx:id="focusLabel" visible="false" />
       </Label>
       <TextField fx:id="NameField" layoutX="347.0" layoutY="146.0" prefHeight="25.0" prefWidth="198.0" />
       <TextField fx:id="TourDescriptionField" layoutX="347.0" layoutY="171.0" prefHeight="25.0" prefWidth="198.0" />
       <TextField fx:id="FromField" layoutX="347.0" layoutY="196.0" prefHeight="25.0" prefWidth="198.0" />
       <TextField fx:id="ToField" layoutX="347.0" layoutY="221.0" prefHeight="25.0" prefWidth="198.0" />
       <TextField fx:id="TransportTypeField" layoutX="347.0" layoutY="246.0" prefHeight="25.0" prefWidth="198.0" />
-      <TextField fx:id="TourDistanceField" layoutX="347.0" layoutY="271.0" prefHeight="25.0" prefWidth="198.0" />
-      <TextField fx:id="EstimatedTimeField" layoutX="347.0" layoutY="296.0" prefHeight="25.0" prefWidth="198.0" />
       <Label layoutX="179.0" layoutY="149.0" prefHeight="17.0" prefWidth="139.0" text="Name:">
          <font>
             <Font size="15.0" />
@@ -46,27 +46,12 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <Label layoutX="179.0" layoutY="273.0" prefHeight="17.0" prefWidth="139.0" text="Tour Distance:">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </Label>
-      <Label layoutX="179.0" layoutY="298.0" prefHeight="17.0" prefWidth="139.0" text="Estimated Time:">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </Label>
-      <Label layoutX="179.0" layoutY="344.0" prefHeight="17.0" prefWidth="139.0" text="Route Information:">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </Label>
+
       <VBox prefHeight="200.0" prefWidth="100.0">
          <children>
             <VBox prefHeight="200.0" prefWidth="100.0" />
          </children>
       </VBox>
-      <Button layoutX="379.0" layoutY="342.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" text="Select Image" />
       <Button fx:id="NewTourSubmit" layoutX="307.0" layoutY="408.0" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="25.0" prefWidth="80.0" text="Submit" />
    </children>
 </AnchorPane>

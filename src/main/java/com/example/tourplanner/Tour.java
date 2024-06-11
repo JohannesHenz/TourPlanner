@@ -1,8 +1,13 @@
 package com.example.tourplanner;
 
-import javafx.scene.image.Image;
+//import javafx.scene.image.Image;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import javafx.collections.ObservableList;
 
 public class Tour {
+    private TourManager manager = TourManager.getInstance();
+    private String id;
     private String name;
     private String description;
     private String from;
@@ -10,21 +15,48 @@ public class Tour {
     private String transportType;
     private double distance;
     private double estimatedTime;
-    private Image routeInformation;
+    @JsonIgnore
+    private double popularity;
+    @JsonIgnore
+    private double childFriendliness;
+
+    //private Image routeInformation;
+
+    public Tour(){ //braucht leeren constructor für databind
+    };
 
     public Tour(String name) {
+        this.id = manager.getNewID();
         this.name = name;
     }
 
-    public String toString(){
-        return name;
-    }
-
     public Tour(String name, String description) {
+        this.id = manager.getNewID();
         this.name = name;
         this.description = description;
     }
     // Getters and setters for all properties
+
+    public double getPopularity() {
+    TourLogManager logManager = TourLogManager.getInstance();
+        return logManager.getTourLogs().stream()
+                .filter(log -> id.equals(log.getTourId()))
+                .count();
+    }
+
+    public double getChildFriendliness() {
+        TourLogManager logManager = TourLogManager.getInstance();
+        //wir rechnen einfach tourloganzahl/schwierigkeitssumme für das inverse der durchschnittsschwierigkeit
+        return (logManager.getTourLogs().stream()
+                        .filter(log -> id.equals(log.getTourId()))
+                        .count()
+                /
+                logManager.getTourLogs().stream()
+                        .filter(log -> id.equals(log.getTourId()))
+                        .mapToDouble(TourLog::getDifficulty)
+                        .sum()
+        );
+    }
 
     public String getName() {
         return name;
@@ -82,11 +114,16 @@ public class Tour {
         this.estimatedTime = estimatedTime;
     }
 
-    public Image getRouteInformation() {
-        return routeInformation;
+
+    @Override
+    public String toString() {
+        return name;
     }
 
-    public void setRouteInformation(Image routeInformation) {
-        this.routeInformation = routeInformation;
+    public String getId(){
+        return id;
+    }
+    public void setId(String id){
+        this.id=id;
     }
 }

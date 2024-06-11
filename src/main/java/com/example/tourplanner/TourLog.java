@@ -1,47 +1,101 @@
 package com.example.tourplanner;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
 import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class TourLog {
-    private StringProperty description;
-    private ObjectProperty<LocalDate> date;
+    private String LogId;
+    @JsonIgnore
+    private Tour tour;
+    private String TourId;
+    private LocalDate date;
+    private float time;
+    private String comment;
+    private float difficulty;
+    private float totalDistance;
+    private float totalTime;
+    private float rating;
 
-    public TourLog(String description, LocalDate date) {
-        this.description = new SimpleStringProperty(description);
-        this.date = new SimpleObjectProperty<>(date);
+    public TourLog(){ //braucht leeren constructor für databind
+    };
+
+    public String getTourId() {
+        return TourId;
     }
 
-
-    public StringProperty descriptionProperty() {
-        return description;
+    public void setTourId(String tourId) {
+        TourId = tourId;
     }
 
-    public String getDescription() {
-        return description.get();
+    public String getLogId() {
+        return LogId;
     }
 
-    public void setDescription(String description) {
-        this.description.set(description);
+    public void setLogId(String logId) {
+        LogId = logId;
     }
 
-    public ObjectProperty<LocalDate> dateProperty() {
-        return date;
+    public Tour getTour() {
+        return tour;
+    }
+
+    public void setTour(Tour tour) {
+        this.tour = tour;
     }
 
     public LocalDate getDate() {
-        return date.get();
+        return date;
     }
 
     public void setDate(LocalDate date) {
-        this.date.set(date);
+        this.date = date;
     }
 
+    public float getTime() {
+        return time;
+    }
 
+    public void setTime(float time) {
+        this.time = time;
+    }
 
-    // getters and setters
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public float getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(float difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public float getTotalDistance() {
+        return totalDistance;
+    }
+
+    public void setTotalDistance(float totalDistance) {
+        this.totalDistance = totalDistance;
+    }
+
+    public float getTotalTime() {
+        return totalTime;
+    }
+
+    public void setTotalTime(float totalTime) {
+        this.totalTime = totalTime;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
 }
