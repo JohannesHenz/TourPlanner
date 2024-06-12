@@ -47,7 +47,7 @@ public class Tour {
     public double getChildFriendliness() {
         TourLogManager logManager = TourLogManager.getInstance();
         //wir rechnen einfach tourloganzahl/schwierigkeitssumme für das inverse der durchschnittsschwierigkeit
-        return (logManager.getTourLogs().stream()
+        return (10*logManager.getTourLogs().stream()
                         .filter(log -> id.equals(log.getTourId()))
                         .count()
                 /

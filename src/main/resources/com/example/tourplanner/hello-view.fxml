@@ -11,12 +11,15 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tourplanner.HelloController">
 
@@ -26,20 +29,14 @@
             <menus>
                 <Menu text="File">
                     <items>
-                        <MenuItem text="Open" />
-                        <MenuItem text="Save" />
-                        <MenuItem text="Exit" />
+                        <MenuItem fx:id="OpenPDF" onAction="#onOpenPDFButtonClick" text="Open" />
+                        <MenuItem fx:id="SafePDF" onAction="#onSavePDFButtonClick" text="Save" />
                     </items>
                 </Menu>
-                <Menu text="Edit">
-                    <!-- Other menu items -->
-                </Menu>
-                <!-- Other menus -->
             </menus>
         </MenuBar>
     </top>
 
-    <!-- Search Bar -->
     <center>
         <HBox>
             <BorderPane.margin>
@@ -48,7 +45,6 @@
         </HBox>
     </center>
 
-    <!-- Left Section for Tours -->
     <left>
         <VBox BorderPane.alignment="CENTER_LEFT">
             <BorderPane.margin>
@@ -61,9 +57,10 @@
                 </ListView>
                 <HBox>
                     <children>
-                        <Button onAction="#addTour" text="+" />
+                        <Button onAction="#addTour" text="Add" />
                         <Button onAction="#editTour" text="Edit" />
                         <Button onAction="#deleteTour" text="Delete" />
+                  <TextField fx:id="TourSearch" prefHeight="25.0" prefWidth="122.0" promptText="Search Tours" />
                     </children>
                 </HBox>
             </children>
@@ -75,8 +72,21 @@
         <TabPane BorderPane.alignment="CENTER">
             <tabs>
                 <Tab text="General">
-                    <!-- General content -->
-                </Tab>
+               <content>
+                  <VBox alignment="CENTER" prefHeight="449.0" prefWidth="904.0">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="427.0" prefWidth="904.0">
+                           <children>
+                              <TextArea fx:id="tourInfo" editable="false" prefHeight="342.0" prefWidth="904.0" text="Name:&#9;&#9;&#9;&#9;&#9;a&#10;Description:&#9;&#9;&#9;&#9;b&#10;From:&#9;&#9;&#9;&#9;&#9;c&#10;To:&#9;&#9;&#9;&#9;&#9;&#9;d&#10;Transport Type:&#9;&#9;&#9;e&#10;Distance:&#9;&#9;&#9;&#9;&#9;f&#10;Estimated Time:&#9;&#9;&#9;g" wrapText="true">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </TextArea>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+               </content></Tab>
                 <Tab text="Route">
                <content>
                     <Pane prefHeight="329.0" prefWidth="784.0">
@@ -120,6 +130,7 @@
                         <Button onAction="#onAddTourLogButtonClick" text="Add" />
                         <Button onAction="#onEditTourLogButtonClick" text="Edit" />
                         <Button onAction="#onDeleteTourLogButtonClick" text="Delete" />
+                  <TextField fx:id="LogSearch" promptText="Search Tourlogs" />
                     </children>
                 </HBox>
             </children>
