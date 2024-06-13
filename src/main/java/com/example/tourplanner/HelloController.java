@@ -347,6 +347,13 @@ public class HelloController {
     };
     @FXML
     protected void onOpenPDFButtonClick(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open PDF");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf"));
+        File file = fileChooser.showOpenDialog(new Stage());
 
+        if (file != null) {
+            Tour newTour = PDFHandler.readPDF(file.getAbsolutePath());
+        }
     };
 }

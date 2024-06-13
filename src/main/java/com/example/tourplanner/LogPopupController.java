@@ -96,7 +96,12 @@ public class LogPopupController {
                         return;
                     }
                 }
-                SelectedTourLog.setComment(comment);
+                if (!comment.matches("^[^\\d]*$")) { //keine zahlen in comments, weil sonst könnt pdf lesen sehr schief gehn
+                    showError("Invalid input", "Comment must not contain any numbers");
+                    return; // or handle the error as needed
+                } else {
+                    SelectedTourLog.setComment(comment);
+                }
                 if (!tryParseFloat(difficulty, SelectedTourLog::setDifficulty)) {
                     showError("Invalid input", "Difficulty must be a number from 1 to 10");
                     return; // or handle the error as needed
@@ -167,7 +172,12 @@ public class LogPopupController {
                         return;
                     }
                 }
-                SelectedTourLog.setComment(comment);
+                if (!comment.matches("^[^\\d]*$")) { //keine zahlen in comments, weil sonst könnt pdf lesen sehr schief gehn
+                    showError("Invalid input", "Comment must not contain any numbers");
+                    return; // or handle the error as needed
+                } else {
+                    SelectedTourLog.setComment(comment);
+                }
                 if (!tryParseFloat(difficulty, SelectedTourLog::setDifficulty)) {
                     showError("Invalid input", "Difficulty must be a number from 1 to 10");
                     return; // or handle the error as needed
