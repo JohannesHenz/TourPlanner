@@ -8,6 +8,7 @@ module com.example.tourplanner {
     requires java.net.http;
     requires kernel;
     requires layout;
+    requires java.logging;
 
     opens com.example.tourplanner to javafx.fxml;
     exports com.example.tourplanner;

@@ -1,0 +1,100 @@
+[
+  {
+    "id": 1,
+    "name": "Sample Tour",
+    "description": "A new tour",
+    "fromLocation": "Start Point",
+    "toLocation": "End Point",
+    "transportType": "Walking",
+    "distance": 10.5,
+    "estimatedTime": 120.0,
+    "tourLogs": []
+  },
+  {
+    "id": 2,
+    "name": "Sample Tour",
+    "description": "A new tour",
+    "fromLocation": "Start Point",
+    "toLocation": "End Point",
+    "transportType": "Walking",
+    "distance": 10.5,
+    "estimatedTime": 120.0,
+    "tourLogs": []
+  },
+  {
+    "id": 4,
+    "name": "434",
+    "description": "A relaxing cruise along the river.",
+    "fromLocation": null,
+    "toLocation": null,
+    "transportType": "Boat",
+    "distance": 0.0,
+    "estimatedTime": 3.0,
+    "tourLogs": []
+  },
+  {
+    "id": 5,
+    "name": "River Cruise",
+    "description": "A relaxing cruise along the river.",
+    "fromLocation": "Pier 1",
+    "toLocation": "Pier 2",
+    "transportType": "Boat",
+    "distance": 0.0,
+    "estimatedTime": 3.0,
+    "tourLogs": []
+  },
+  {
+    "id": 6,
+    "name": "River Cruise",
+    "description": "A relaxing cruise along the river.",
+    "fromLocation": null,
+    "toLocation": null,
+    "transportType": "Boat",
+    "distance": 0.0,
+    "estimatedTime": 3.0,
+    "tourLogs": [
+      {
+        "id": 2,
+        "date": "2024-05-31",
+        "time": 3.0,
+        "comment": "Beautiful scenery",
+        "difficulty": 2.0,
+        "totalDistance": 15.0,
+        "totalTime": 4.0,
+        "rating": 5.0
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "River Cruise",
+    "description": "A relaxing cruise along the river.",
+    "fromLocation": "Pier 1",
+    "toLocation": "Pier 2",
+    "transportType": "Boat",
+    "distance": 0.0,
+    "estimatedTime": 3.0,
+    "tourLogs": [
+      {
+        "id": 2,
+        "date": "2024-05-31",
+        "time": 3.0,
+        "comment": "Beautiful scenery",
+        "difficulty": 2.0,
+        "totalDistance": 15.0,
+        "totalTime": 4.0,
+        "rating": 5.0
+      },
+      {
+        "id": 3,
+        "date": "2024-05-31",
+        "time": 3.0,
+        "comment": "Beautiful scenery",
+        "difficulty": 2.0,
+        "totalDistance": 15.0,
+        "totalTime": 4.0,
+        "rating": 5.0
+      }
+    ]
+  }
+]

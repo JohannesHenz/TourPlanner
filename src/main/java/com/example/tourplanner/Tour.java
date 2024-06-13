@@ -5,13 +5,15 @@ package com.example.tourplanner;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javafx.collections.ObservableList;
 
+import java.util.List;
+
 public class Tour {
     private TourManager manager = TourManager.getInstance();
     private String id;
     private String name;
     private String description;
-    private String from;
-    private String to;
+    private String fromLocation;
+    private String toLocation;
     private String transportType;
     private double distance;
     private double estimatedTime;
@@ -19,11 +21,18 @@ public class Tour {
     private double popularity;
     @JsonIgnore
     private double childFriendliness;
+    private List<TourLogs> tourLogs;
 
     //private Image routeInformation;
 
     public Tour(){ //braucht leeren constructor für databind
     };
+    public List<TourLogs> getTourLogs() {
+        return tourLogs;
+    } // with this setup the list should be ignored for serialization but not deserialization
+    public void setTourLogs(List<TourLogs> tourLogs) {
+        this.tourLogs = tourLogs;
+    }
 
     public Tour(String name) {
         this.id = manager.getNewID();
@@ -36,14 +45,14 @@ public class Tour {
         this.description = description;
     }
     // Getters and setters for all properties
-
+    @JsonIgnore
     public double getPopularity() {
     TourLogManager logManager = TourLogManager.getInstance();
         return logManager.getTourLogs().stream()
                 .filter(log -> id.equals(log.getTourId()))
                 .count();
     }
-
+    @JsonIgnore
     public double getChildFriendliness() {
         TourLogManager logManager = TourLogManager.getInstance();
         //wir rechnen einfach tourloganzahl/schwierigkeitssumme für das inverse der durchschnittsschwierigkeit
@@ -53,7 +62,7 @@ public class Tour {
                 /
                 logManager.getTourLogs().stream()
                         .filter(log -> id.equals(log.getTourId()))
-                        .mapToDouble(TourLog::getDifficulty)
+                        .mapToDouble(TourLogs::getDifficulty)
                         .sum()
         );
     }
@@ -74,20 +83,20 @@ public class Tour {
         this.description = description;
     }
 
-    public String getFrom() {
-        return from;
+    public String getFromLocation() {
+        return fromLocation;
     }
 
-    public void setFrom(String from) {
-        this.from = from;
+    public void setFromLocation(String from) {
+        this.fromLocation = from;
     }
 
-    public String getTo() {
-        return to;
+    public String getToLocation() {
+        return toLocation;
     }
 
-    public void setTo(String to) {
-        this.to = to;
+    public void setToLocation(String to) {
+        this.toLocation = to;
     }
 
     public String getTransportType() {
@@ -114,12 +123,10 @@ public class Tour {
         this.estimatedTime = estimatedTime;
     }
 
-
     @Override
     public String toString() {
         return name;
     }
-
     public String getId(){
         return id;
     }

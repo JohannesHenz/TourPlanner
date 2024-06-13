@@ -30,27 +30,27 @@ public class HelloController {
     @FXML
     private ListView<Tour> tourList;
     @FXML
-    private ObservableList<TourLog> tourLogs;
+    private ObservableList<TourLogs> tourLogs;
     @FXML
     private ObjectProperty<Tour> selectedTour = new SimpleObjectProperty<>();
     @FXML
-    private TourLog SelectedTourLog;
+    private TourLogs SelectedTourLog;
     @FXML
-    private TableView<TourLog> tourLogTable;
+    private TableView<TourLogs> tourLogTable;
     @FXML
-    private TableColumn<TourLog, LocalDate> dateColumn;
+    private TableColumn<TourLogs, LocalDate> dateColumn;
     @FXML
-    private TableColumn<TourLog, Float> timeColumn;
+    private TableColumn<TourLogs, Float> timeColumn;
     @FXML
-    private TableColumn<TourLog, String> commentColumn;
+    private TableColumn<TourLogs, String> commentColumn;
     @FXML
-    private TableColumn<TourLog, Float> difficultyColumn;
+    private TableColumn<TourLogs, Float> difficultyColumn;
     @FXML
-    private TableColumn<TourLog, Float> totalDistanceColumn;
+    private TableColumn<TourLogs, Float> totalDistanceColumn;
     @FXML
-    private TableColumn<TourLog, Float> totalTimeColumn;
+    private TableColumn<TourLogs, Float> totalTimeColumn;
     @FXML
-    private TableColumn<TourLog, Float> ratingColumn;
+    private TableColumn<TourLogs, Float> ratingColumn;
     @FXML
     private TextArea tourInfo;
     @FXML
@@ -72,18 +72,13 @@ public class HelloController {
         return selectedTour;
     }
 
-    public TourLog getSelectedTourLog(){
+    public TourLogs getSelectedTourLog(){
         return SelectedTourLog;
     }
 
     public void initialize() { //hier setzen wir die internen tours auf die des managers. die logs holen wir on demand später
             // Set items for tourList and tourLogList
             tourList.setItems(manager.getTours());
-            /*List<TourLog> filteredTourLogs = logManager.getTourLogs().stream()
-                .filter(log -> log.getTour().equals(SelectedTour))
-                .collect(Collectors.toList());
-
-            tourLogs = FXCollections.observableArrayList(filteredTourLogs);*/
             tourLogs = logManager.getTourLogs();
 
         if(!(dateColumn==null || timeColumn==null ||commentColumn==null ||difficultyColumn==null ||totalDistanceColumn==null ||totalTimeColumn==null ||ratingColumn==null)) {
@@ -110,7 +105,7 @@ public class HelloController {
         // Update the tour info and log list for the initially selected tour
         selectedTour.addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                List<TourLog> filteredTourLogs = logManager.getTourLogs().stream()
+                List<TourLogs> filteredTourLogs = logManager.getTourLogs().stream()
                         .filter(log -> log.getTour().equals(newValue))
                         .collect(Collectors.toList());
                 tourLogs = FXCollections.observableArrayList(filteredTourLogs);
@@ -142,7 +137,7 @@ public class HelloController {
     @FXML
     public void updateLogList(){
         if (selectedTour.get() != null) {
-            List<TourLog> filteredTourLogs = logManager.getTourLogs().stream()
+            List<TourLogs> filteredTourLogs = logManager.getTourLogs().stream()
                     .filter(log -> log.getTour().equals(selectedTour.get()))
                     .collect(Collectors.toList());
             tourLogs = FXCollections.observableArrayList(filteredTourLogs);
@@ -228,7 +223,7 @@ public class HelloController {
 
     @FXML
     protected void onDeleteTourLogButtonClick() {
-        TourLog selectedTourLog = tourLogTable.getSelectionModel().getSelectedItem();
+        TourLogs selectedTourLog = tourLogTable.getSelectionModel().getSelectedItem();
         if (selectedTourLog != null) {
             //tourLogTable.getItems().remove(selectedTourLog);
             logManager.deleteTourLog(selectedTourLog);
@@ -236,7 +231,7 @@ public class HelloController {
     }
     @FXML
     protected String getTourInfo(){
-        return "Name:\t\t\t\t"+selectedTour.getValue().getName()+"\nDescription:\t\t\t"+selectedTour.getValue().getDescription()+"\nFrom:\t\t\t\t"+selectedTour.getValue().getFrom()+"\nTo:\t\t\t\t\t"+selectedTour.getValue().getTo()+"\nTransport Type:\t\t"+selectedTour.getValue().getTransportType()+"\nDistance:\t\t\t\t"+String.format("%.1f",selectedTour.getValue().getDistance())+"\nEstimated Time:\t\t"+String.format("%.0f",selectedTour.getValue().getEstimatedTime())+"\nPopularity: \t\t\t"+String.format("%.0f",selectedTour.getValue().getPopularity())+"\t\t\t\t\t(search for with ie pop>1)\nChild Friendliness: \t\t"+String.format("%.1f",selectedTour.getValue().getChildFriendliness())+"\t\t\t\t\t(search for with ie cf>1)";
+        return "Name:\t\t\t\t"+selectedTour.getValue().getName()+"\nDescription:\t\t\t"+selectedTour.getValue().getDescription()+"\nFrom:\t\t\t\t"+selectedTour.getValue().getFromLocation()+"\nTo:\t\t\t\t\t"+selectedTour.getValue().getToLocation()+"\nTransport Type:\t\t"+selectedTour.getValue().getTransportType()+"\nDistance:\t\t\t\t"+String.format("%.1f",selectedTour.getValue().getDistance())+"\nEstimated Time:\t\t"+String.format("%.0f",selectedTour.getValue().getEstimatedTime())+"\nPopularity: \t\t\t"+String.format("%.0f",selectedTour.getValue().getPopularity())+"\t\t\t\t\t(search for with ie pop>1)\nChild Friendliness: \t\t"+String.format("%.1f",selectedTour.getValue().getChildFriendliness())+"\t\t\t\t\t(search for with ie cf>1)";
 
     }
     @FXML
@@ -303,14 +298,14 @@ public class HelloController {
         String searchText = LogSearch.getText();
         if (searchText == null || searchText.isEmpty()) {
             // If the search text is empty, display all tour logs for the selected tour
-            List<TourLog> filteredTourLogs = logManager.getTourLogs().stream()
+            List<TourLogs> filteredTourLogs = logManager.getTourLogs().stream()
                     .filter(log -> log.getTour().equals(selectedTour.getValue()))
                     .collect(Collectors.toList());
             tourLogs = FXCollections.observableArrayList(filteredTourLogs);
             tourLogTable.setItems(tourLogs);
         } else {
             // Filter the tour logs based on the search text substring in comments
-            List<TourLog> filteredTourLogs = logManager.getTourLogs().stream()
+            List<TourLogs> filteredTourLogs = logManager.getTourLogs().stream()
                     .filter(log -> log.getTour().equals(selectedTour.getValue()) &&
                             log.getComment().toLowerCase().contains(searchText.toLowerCase()))
                     .collect(Collectors.toList());
@@ -327,7 +322,7 @@ public class HelloController {
             return;
         }
         // Get corresponding tour logs for the selected tour
-        List<TourLog> selectedTourLogs = tourLogs.stream()
+        List<TourLogs> selectedTourLogs = tourLogs.stream()
                 .filter(log -> log.getTour().equals(selectedTour))
                 .collect(Collectors.toList());
 

@@ -63,11 +63,11 @@ public class PopupController {
         if(this.isEdit){
             NameField.setText(SelectedTour.getName());
             TourDescriptionField.setText(SelectedTour.getDescription());
-            FromField.setText(SelectedTour.getFrom());
-            ToField.setText(SelectedTour.getTo());
+            FromField.setText(SelectedTour.getFromLocation());
+            ToField.setText(SelectedTour.getToLocation());
             TransportTypeField.setValue(SelectedTour.getTransportType());
-            clickedFromSuggestion = SelectedTour.getFrom();
-            clickedToSuggestion = SelectedTour.getTo();
+            clickedFromSuggestion = SelectedTour.getFromLocation();
+            clickedToSuggestion = SelectedTour.getToLocation();
             header.setText("Edit a Tour");
         }
 
@@ -152,8 +152,8 @@ public class PopupController {
             // Create a new instance of Tour with the retrieved information
             this.SelectedTour = new Tour(name, description); // Assuming Tour has a constructor that takes name and description
             System.out.println(name + "  " + description);
-            this.SelectedTour.setFrom(from);
-            this.SelectedTour.setTo(to);
+            this.SelectedTour.setFromLocation(from);
+            this.SelectedTour.setToLocation(to);
             this.SelectedTour.setTransportType(transportType);
             if (name == null || name.isEmpty() || description == null) {
                 showError("Invalid input", "name can't be empty");
@@ -177,8 +177,8 @@ public class PopupController {
             // Create a new instance of Tour with the retrieved information
             this.SelectedTour.setName(name);
             this.SelectedTour.setDescription(description);
-            this.SelectedTour.setFrom(from);
-            this.SelectedTour.setTo(to);
+            this.SelectedTour.setFromLocation(from);
+            this.SelectedTour.setToLocation(to);
             this.SelectedTour.setTransportType(transportType);
             if (name == null || name.isEmpty() || description == null) {
                 showError("Invalid input", "name can't be empty");

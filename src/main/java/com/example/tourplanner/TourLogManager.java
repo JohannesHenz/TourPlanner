@@ -12,38 +12,23 @@ public class TourLogManager {
 
     private static final TourLogManager instance = new TourLogManager();
 
-    private ObservableList<TourLog> tourLogs = FXCollections.observableArrayList();
+    private ObservableList<TourLogs> tourLogs = FXCollections.observableArrayList();
 
-    private TourLog selectedTourLog;
+    private TourLogs selectedTourLog;
 
     public TourLogManager() {
-        tourLogs.addListener((ListChangeListener.Change<? extends TourLog> change) -> {
+        tourLogs.addListener((ListChangeListener.Change<? extends TourLogs> change) -> {
+            BackendService backendService = new BackendService();
             while (change.next()) {
                 if (change.wasAdded()) {
-                    for (TourLog log: change.getAddedSubList()) {
-                        HelloController hello = HelloController.getInstance();
-                        //add to view
-                        //hello.addToLogList(log);
-
-                        //write new json for CRUD
-                        ObjectMapper objectMapper = new ObjectMapper();
-                        objectMapper.registerModule(new JavaTimeModule());
-                        try {
-                            // Write to a JSON file
-                            objectMapper.writeValue(new File("src/main/resources/newTourLogTmp.json"), log);
-                            System.out.println("JSON file updated: newTourLogTmp.json");
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        //TO DO:
-                        //some restcall back to server to add this to the database, containing the Json
+                    for (TourLogs log: change.getAddedSubList()) {
+                        backendService.AddTourLogPOST(log);
                     }
                 }
                 if (change.wasRemoved()) {
-                    HelloController hello = HelloController.getInstance();
-                    //hello.updateLogList();
-                    //TO DO:
-                    //some restcall back to server to add this to the database, containing the TourID
+                    for (TourLogs log: change.getAddedSubList()) {
+                        backendService.DeleteTourLogDELETE(log);
+                    }
                 }
             }
         });
@@ -53,21 +38,21 @@ public class TourLogManager {
         return instance;
     }
 
-    public TourLog getSelectedTourLog() {
+    public TourLogs getSelectedTourLog() {
         return selectedTourLog;
     }
 
-    public void setSelectedTourLog(TourLog selectedTourLog) {
+    public void setSelectedTourLog(TourLogs selectedTourLog) {
         this.selectedTourLog = selectedTourLog;
     }
 
-    public void addTourLog(TourLog tourLog) {
+    public void addTourLog(TourLogs tourLog) {
         tourLogs.add(tourLog);
     }
 
-    public void editTourLog(TourLog editedTourLog) {
+    public void editTourLog(TourLogs editedTourLog) {
         for (int i = 0; i < tourLogs.size(); i++) {
-            if (tourLogs.get(i).getLogId().equals(editedTourLog.getLogId())) {
+            if (tourLogs.get(i).getId().equals(editedTourLog.getId())) {
                 tourLogs.get(i).setDate(editedTourLog.getDate());
                 tourLogs.get(i).setTime(editedTourLog.getTime());
                 tourLogs.get(i).setComment(editedTourLog.getComment());
@@ -75,26 +60,15 @@ public class TourLogManager {
                 tourLogs.get(i).setTotalDistance(editedTourLog.getTotalDistance());
                 tourLogs.get(i).setTotalTime(editedTourLog.getTotalTime());
                 tourLogs.get(i).setRating(editedTourLog.getRating());
-                HelloController hello = HelloController.getInstance();
-                System.out.println("TourLog Edited: " + editedTourLog.getLogId());
-                //hello.updateLogList();
-                //write new json for CRUD
-                ObjectMapper objectMapper = new ObjectMapper();
-                objectMapper.registerModule(new JavaTimeModule());
-                try {
-                    // Write to a JSON file
-                    objectMapper.writeValue(new File("src/main/resources/EditedTourLogTmp.json"), editedTourLog);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                //TO DO:
-                //some restcall back to server to add this to the database, containing the Json
+                System.out.println("TourLog Edited: " + editedTourLog.getId());
+                BackendService backendService = new BackendService();
+                backendService.EditTourLogPUT(editedTourLog);
                 return; // Exit the method once the replacement is done
             }
         }
     }
 
-    public void deleteTourLog(TourLog tourLogToDelete) {
+    public void deleteTourLog(TourLogs tourLogToDelete) {
         tourLogs.remove(tourLogToDelete);
     }
 
@@ -104,8 +78,8 @@ public class TourLogManager {
         do {
             id = UUID.randomUUID().toString();
             isUnique = true;
-            for (TourLog log : tourLogs) {
-                if (log.getLogId().equals(id)) {
+            for (TourLogs log : tourLogs) {
+                if (log.getId().equals(id)) {
                     isUnique = false;
                     break;
                 }
@@ -114,7 +88,7 @@ public class TourLogManager {
         return id;
     }
 
-    public ObservableList<TourLog> getTourLogs() {
+    public ObservableList<TourLogs> getTourLogs() {
         return tourLogs;
     }
 }

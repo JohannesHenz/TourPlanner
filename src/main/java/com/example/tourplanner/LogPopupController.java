@@ -32,7 +32,7 @@ public class LogPopupController {
         @FXML
         private Button NewTourLogSubmit;
         @FXML
-        private TourLog SelectedTourLog;
+        private TourLogs SelectedTourLog;
         @FXML
         private Tour SelectedTour;
         @FXML
@@ -42,7 +42,7 @@ public class LogPopupController {
         @FXML
         private Label header;
 
-        public void initData(TourLog log, Tour tour, boolean isEdit){
+        public void initData(TourLogs log, Tour tour, boolean isEdit){
             //damit der setText geht, weil sonst regt heißt cant open window
             focusLabel.requestFocus();
             this.SelectedTourLog = log;
@@ -83,7 +83,7 @@ public class LogPopupController {
                 String rating = RatingField.getText();
                 // Create a new instance of Tour with the retrieved information
                 Tour selectedTour = this.SelectedTour;
-                this.SelectedTourLog = new TourLog(); // Assuming Tour has a constructor that takes name and description
+                this.SelectedTourLog = new TourLogs(); // Assuming Tour has a constructor that takes name and description
                 //hier noch handling falls was leer is
                 SelectedTourLog.setDate(date);
                 if (!tryParseFloat(time, SelectedTourLog::setTime)) {
@@ -142,7 +142,7 @@ public class LogPopupController {
                         return;
                     }
                 }
-                SelectedTourLog.setLogId(TourLogManager.getInstance().getNewLogID());
+                SelectedTourLog.setId(TourLogManager.getInstance().getNewLogID());
                 SelectedTourLog.setTour(selectedTour);
                 SelectedTourLog.setTourId(selectedTour.getId());
 

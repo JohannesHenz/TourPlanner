@@ -16,6 +16,8 @@ import java.util.Map;
 import java.io.InputStream;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.IOException;
+import java.time.LocalDate;
+
 
 public class HelloApplication extends Application {
     @Override
@@ -28,38 +30,8 @@ public class HelloApplication extends Application {
     }
 
     public static void main(String[] args) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        TourManager manager = TourManager.getInstance();
-        try {
-            // Read JSON file and map it to a Map
-            File testdata = new File("src/main/resources/testdata.json");
-            Tour[] tourArray = objectMapper.readValue(testdata, Tour[].class);
-            List<Tour> tourList = Arrays.asList(tourArray);
-
-            //schmeiß die tours alle rein
-            for (Tour tour : tourList) {
-                    manager.addTour(tour);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            // Read JSON file and map it to a Map
-            objectMapper.registerModule(new JavaTimeModule());
-            File testdata = new File("src/main/resources/testlogs.json");
-            TourLog[] tourArray = objectMapper.readValue(testdata, TourLog[].class);
-            List<TourLog> LogList = Arrays.asList(tourArray);
-            //hol die instance
-            TourLogManager logManager = TourLogManager.getInstance();
-            //schmeiß die tours alle rein
-            for (TourLog log : LogList) {
-                log.setTour(manager.getById(log.getTourId()));
-                logManager.addTourLog(log);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        BackendService initializeTours = new BackendService();
+        initializeTours.getTours();
         launch();
         }
 }

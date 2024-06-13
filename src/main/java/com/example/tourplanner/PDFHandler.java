@@ -23,8 +23,7 @@ import java.util.regex.Matcher;
 
 
 public class PDFHandler {
-    public void createPDF(Tour tour, List<TourLog> tourLogs, String dest) {
-        String path="tours.pdf";
+    public void createPDF(Tour tour, List<TourLogs> tourLogs, String dest) {
         try {
             PdfWriter pdfWriter = new PdfWriter(dest);
             PdfDocument pdfDocument = new PdfDocument(pdfWriter);
@@ -36,8 +35,8 @@ public class PDFHandler {
             document.add(headline);
             document.add(new Paragraph("Name: " + tour.getName()));
             document.add(new Paragraph("Description: " + tour.getDescription()));
-            document.add(new Paragraph("From: " + tour.getFrom()));
-            document.add(new Paragraph("To: " + tour.getTo()));
+            document.add(new Paragraph("From: " + tour.getFromLocation()));
+            document.add(new Paragraph("To: " + tour.getToLocation()));
             document.add(new Paragraph("Transport Type: " + tour.getTransportType()));
             document.add(new Paragraph("Distance: " + tour.getDistance()));
             document.add(new Paragraph("Estimated Time: " + String.format("%.0f",tour.getEstimatedTime())));
@@ -59,7 +58,7 @@ public class PDFHandler {
             table.addHeaderCell("Total Time");
             table.addHeaderCell("Rating");
 
-            for (TourLog log : tourLogs) {
+            for (TourLogs log : tourLogs) {
                 table.addCell(log.getDate().toString());
                 table.addCell(String.format("%.0f",log.getTime()));
                 table.addCell(log.getComment());
@@ -83,7 +82,7 @@ public class PDFHandler {
     };
     public static Tour readPDF(String filePath) {
         Tour tour = null;
-        List<TourLog> tourLogs = new ArrayList<>();
+        List<TourLogs> tourLogs = new ArrayList<>();
 
         try (PdfDocument pdfDoc = new PdfDocument(new PdfReader(filePath))) {
             StringBuilder text = new StringBuilder();
@@ -105,8 +104,8 @@ public class PDFHandler {
             float estimatedTime = extractFloatValue(lines, "Estimated Time:");
 
             tour = new Tour(tourName, description);
-            tour.setFrom(from);
-            tour.setTo(to);
+            tour.setFromLocation(from);
+            tour.setToLocation(to);
             tour.setTransportType(transportType);
             tour.setDistance(distance);
             tour.setEstimatedTime(estimatedTime);
@@ -166,7 +165,7 @@ public class PDFHandler {
                     float rating = Float.parseFloat(fieldMatcher.group(7));
 
                     // Create a new TourLog and set its fields
-                    TourLog log = new TourLog();
+                    TourLogs log = new TourLogs();
                     log.setDate(LocalDate.parse(date));
                     log.setTime(time);
                     log.setComment(comment);
@@ -174,7 +173,7 @@ public class PDFHandler {
                     log.setTotalDistance(totalDistance);
                     log.setTotalTime(totalTime);
                     log.setRating(rating);
-                    log.setLogId(TourLogManager.getInstance().getNewLogID());
+                    log.setId(TourLogManager.getInstance().getNewLogID());
                     log.setTour(tour);
                     log.setTourId(tour.getId());
 
@@ -186,7 +185,7 @@ public class PDFHandler {
         }
 
         TourLogManager tourLogManager = TourLogManager.getInstance();
-        for (TourLog log : tourLogs) {
+        for (TourLogs log : tourLogs) {
             tourLogManager.addTourLog(log);
         }
 

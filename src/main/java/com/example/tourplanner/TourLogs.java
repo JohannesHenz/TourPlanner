@@ -3,8 +3,8 @@ package com.example.tourplanner;
 import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class TourLog {
-    private String LogId;
+public class TourLogs {
+    private String id;
     @JsonIgnore
     private Tour tour;
     private String TourId;
@@ -16,9 +16,8 @@ public class TourLog {
     private float totalTime;
     private float rating;
 
-    public TourLog(){ //braucht leeren constructor für databind
+    public TourLogs(){ //braucht leeren constructor für databind
     };
-
     public String getTourId() {
         return TourId;
     }
@@ -27,12 +26,12 @@ public class TourLog {
         TourId = tourId;
     }
 
-    public String getLogId() {
-        return LogId;
+    public String getId() {
+        return id;
     }
 
-    public void setLogId(String logId) {
-        LogId = logId;
+    public void setId(String logId) {
+        id = logId;
     }
 
     public Tour getTour() {
