@@ -18,7 +18,7 @@ public class TourLogManager {
 
     public TourLogManager() {
         tourLogs.addListener((ListChangeListener.Change<? extends TourLogs> change) -> {
-            BackendService backendService = new BackendService();
+            BackendService backendService = BackendService.getInstance();
             while (change.next()) {
                 if (change.wasAdded()) {
                     for (TourLogs log: change.getAddedSubList()) {
@@ -61,7 +61,7 @@ public class TourLogManager {
                 tourLogs.get(i).setTotalTime(editedTourLog.getTotalTime());
                 tourLogs.get(i).setRating(editedTourLog.getRating());
                 System.out.println("TourLog Edited: " + editedTourLog.getId());
-                BackendService backendService = new BackendService();
+                BackendService backendService = BackendService.getInstance();
                 backendService.EditTourLogPUT(editedTourLog);
                 return; // Exit the method once the replacement is done
             }

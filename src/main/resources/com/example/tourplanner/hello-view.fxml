@@ -128,9 +128,9 @@
                 </TableView>
                 <HBox>
                     <children>
-                        <Button onAction="#onAddTourLogButtonClick" text="Add" />
-                        <Button onAction="#onEditTourLogButtonClick" text="Edit" />
-                        <Button onAction="#onDeleteTourLogButtonClick" text="Delete" />
+                        <Button onAction="#addTourLog" text="Add" />
+                        <Button onAction="#editTourLog" text="Edit" />
+                        <Button onAction="#deleteTourLog" text="Delete" />
                   <TextField fx:id="LogSearch" promptText="Search Tourlogs" />
                     </children>
                 </HBox>

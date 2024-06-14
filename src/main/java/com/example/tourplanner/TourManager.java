@@ -21,7 +21,7 @@ public class TourManager {
     public TourManager() {
 
         tours.addListener((ListChangeListener.Change<? extends Tour> change) -> {
-            BackendService backendService = new BackendService();
+            BackendService backendService = BackendService.getInstance();
             while (change.next()) {
                 if (change.wasAdded()) {
                     for (Tour tour : change.getAddedSubList()) {
@@ -67,7 +67,7 @@ public class TourManager {
                 tours.get(i).setEstimatedTime(editedTour.getEstimatedTime());
                 System.out.println("Tour Edited: " + editedTour.getName());
                 //backend management
-                BackendService backendService = new BackendService();
+                BackendService backendService = BackendService.getInstance();
                 backendService.EditTourPUT(editedTour);
                 return; // Exit the method once the replacement is done
             }

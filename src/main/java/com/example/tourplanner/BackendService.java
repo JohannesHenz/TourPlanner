@@ -23,10 +23,14 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 
 
 public class BackendService {
+    private static final BackendService instance = new BackendService();
     private static final Logger LOGGER = Logger.getLogger(BackendService.class.getName());
 
     private boolean startAdding = false; //damit beim initialisieren nicht gleich alle sachen wieder retour geschickt werden lel
     public BackendService() {
+    }
+    public static BackendService getInstance() {
+        return instance;
     }
 
     public void getTours() {
@@ -72,11 +76,15 @@ public class BackendService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        System.out.println("ende von addTrigger");
         startAdding = true;
     }
 
+
+
     public void AddTourPOST(Tour tour) {
         if (startAdding) {
+
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule()); // Register JavaTimeModule
 
@@ -105,6 +113,7 @@ public class BackendService {
 
     public void AddTourLogPOST(TourLogs log) {
         if (startAdding) {
+            System.out.println("stimmts?");
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule()); // Register JavaTimeModule
 

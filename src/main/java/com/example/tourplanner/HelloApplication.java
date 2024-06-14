@@ -30,7 +30,7 @@ public class HelloApplication extends Application {
     }
 
     public static void main(String[] args) {
-        BackendService initializeTours = new BackendService();
+        BackendService initializeTours =BackendService.getInstance();
         initializeTours.getTours();
         launch();
         }

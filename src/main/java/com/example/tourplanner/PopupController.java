@@ -1,30 +1,16 @@
 package com.example.tourplanner;
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import java.util.List;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.io.UnsupportedEncodingException;
-
 
 public class PopupController {
-    private TourManager manager = TourManager.getInstance();
-    private static final String API_KEY = "5b3ce3597851110001cf6248bc797bfd5e6d43bc8245ff9754a1bfe3";
-    private static final String GEOCODE_URL = "https://api.openrouteservice.org/geocode/search?api_key=" + API_KEY + "&text=";
+    private TourViewModel viewModel = new TourViewModel();
+
     @FXML
     private TextField NameField;
     @FXML
@@ -38,175 +24,64 @@ public class PopupController {
     @FXML
     private Button NewTourSubmit;
     @FXML
-    private Tour SelectedTour;
-    @FXML
-    private boolean isEdit;
-    @FXML
-    private Label focusLabel;
+    private Label header;
     @FXML
     private ListView<String> fromSuggestions;
     @FXML
     private ListView<String> toSuggestions;
-    private String clickedFromSuggestion;
-    private String clickedToSuggestion;
+
+    private Tour SelectedTour;
+    private String originalFromLocation;
+    private String originalToLocation;
     @FXML
-    private Label header;
+    public void initialize() {
+        // Bind UI components to ViewModel properties
+        NameField.textProperty().bindBidirectional(viewModel.nameProperty());
+        TourDescriptionField.textProperty().bindBidirectional(viewModel.descriptionProperty());
+        FromField.textProperty().bindBidirectional(viewModel.fromLocationProperty());
+        ToField.textProperty().bindBidirectional(viewModel.toLocationProperty());
+        TransportTypeField.valueProperty().bindBidirectional(viewModel.transportTypeProperty());
+        fromSuggestions.itemsProperty().bind(viewModel.fromSuggestionsProperty());
+        toSuggestions.itemsProperty().bind(viewModel.toSuggestionsProperty());
+        TransportTypeField.setItems(FXCollections.observableArrayList("car", "bike", "walking"));
+    }
 
-    public void initData(Tour tour, boolean isEdit){
-        clickedFromSuggestion=""; //initilize so we dont get an error if nothing was clicked
-        clickedToSuggestion="";
-
-        //damit der setText geht, weil sonst heißt cant open window
-        focusLabel.requestFocus();
-        this.SelectedTour = tour;
-        this.isEdit = isEdit;
-        if(this.isEdit){
-            NameField.setText(SelectedTour.getName());
-            TourDescriptionField.setText(SelectedTour.getDescription());
-            FromField.setText(SelectedTour.getFromLocation());
-            ToField.setText(SelectedTour.getToLocation());
-            TransportTypeField.setValue(SelectedTour.getTransportType());
-            clickedFromSuggestion = SelectedTour.getFromLocation();
-            clickedToSuggestion = SelectedTour.getToLocation();
-            header.setText("Edit a Tour");
+    public void initData(Tour tour, boolean isEdit) {
+        if(isEdit) {
+            this.SelectedTour = tour;
+            originalFromLocation = SelectedTour.getFromLocation();
+            originalToLocation = SelectedTour.getToLocation();
         }
-        else{
-            TransportTypeField.setValue("car");
-        }
+        viewModel.initialize(tour, isEdit);
+        header.setText(isEdit ? "Edit a Tour" : "Create a New Tour");
 
+        FromField.addEventHandler(KeyEvent.KEY_RELEASED, event -> viewModel.fetchSuggestions(FromField.getText(), viewModel.fromSuggestionsProperty()));
+        ToField.addEventHandler(KeyEvent.KEY_RELEASED, event -> viewModel.fetchSuggestions(ToField.getText(), viewModel.toSuggestionsProperty()));
 
-        FromField.addEventHandler(KeyEvent.KEY_RELEASED, event -> fetchSuggestions(FromField.getText(), fromSuggestions));
-        ToField.addEventHandler(KeyEvent.KEY_RELEASED, event -> fetchSuggestions(ToField.getText(), toSuggestions));
-
-        // Set listeners for suggestions ListView clicks
         fromSuggestions.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                Platform.runLater(() -> {
-                    FromField.setText(newValue);
-                    fetchSuggestions(FromField.getText(), fromSuggestions);
-                    clickedFromSuggestion = newValue;
-                    System.out.println(clickedFromSuggestion);
-                });
+                Platform.runLater(() -> FromField.setText(newValue));
             }
         });
-        // nochmal for to
+
         toSuggestions.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                Platform.runLater(() -> {
-                    ToField.setText(newValue);
-                    fetchSuggestions(ToField.getText(), toSuggestions);
-                    clickedToSuggestion = newValue;
-                    System.out.println(clickedToSuggestion);
-                });
+                Platform.runLater(() -> ToField.setText(newValue));
             }
         });
-        ObservableList<String> transportOptions = FXCollections.observableArrayList("car", "bike", "walking");
-        TransportTypeField.setItems(transportOptions);
     }
 
-    private void fetchSuggestions(String query, ListView<String> suggestionsListView) {
-        try {
-        String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8.toString());
-        HttpClient client = HttpClient.newHttpClient();
-        System.out.println(encodedQuery);
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(GEOCODE_URL + encodedQuery))
-                .build();
-
-        client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                .thenApply(HttpResponse::body)
-                .thenApply(this::parseSuggestions)
-                .thenAccept(suggestions -> Platform.runLater(() -> {
-                    suggestionsListView.getItems().clear();
-                    suggestionsListView.getItems().addAll(suggestions);
-                }));
-    } catch (UnsupportedEncodingException e) {
-        // Handle encoding exception
-        e.printStackTrace();
-    }
-    }
-
-    private List<String> parseSuggestions(String responseBody) {
-        List<String> suggestions = new ArrayList<>();
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode root = mapper.readTree(responseBody);
-            JsonNode features = root.path("features");
-            for (JsonNode feature : features) {
-                String place = feature.path("properties").path("label").asText();
-                suggestions.add(place);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return suggestions;
-    }
-
-    // Method to handle the action when the confirm button is clicked
     @FXML
     private void handleSubmit() {
-        if (!isEdit) {
-            // Retrieve information from text fields
-            String name = NameField.getText();
-            String description = TourDescriptionField.getText();
-            String from = FromField.getText();
-            String to = ToField.getText();
-            String transportType = TransportTypeField.getValue();
-            // Create a new instance of Tour with the retrieved information
-            this.SelectedTour = new Tour(name, description); // Assuming Tour has a constructor that takes name and description
-            System.out.println(name + "  " + description);
-            this.SelectedTour.setFromLocation(from);
-            this.SelectedTour.setToLocation(to);
-            this.SelectedTour.setTransportType(transportType);
-
-            if (name.isBlank()) {
-                showError("Invalid input", "name can't be empty");
-                return;
-            }
-            if (description.isBlank()) {
-                showError("Invalid input", "Description can't be empty");
-                return;
-            }
-            if(!clickedFromSuggestion.equals(from) || !clickedToSuggestion.equals(to) || from.isBlank() || to.isBlank()){
-                showError("Invalid input", "from and to must be values from the list");
-                return;
-            }
-            manager.addTour(this.SelectedTour);
-            // Close the window
+        try {
+            viewModel.validateAndSaveTour(originalFromLocation, originalToLocation);
             Stage stage = (Stage) NewTourSubmit.getScene().getWindow();
             stage.close();
-        } else {
-            // Retrieve information from text fields
-            String name = NameField.getText();
-            String description = TourDescriptionField.getText();
-            String from = FromField.getText();
-            String to = ToField.getText();
-            String transportType = TransportTypeField.getValue();
-            // Create a new instance of Tour with the retrieved information
-            this.SelectedTour.setName(name);
-            this.SelectedTour.setDescription(description);
-            this.SelectedTour.setFromLocation(from);
-            this.SelectedTour.setToLocation(to);
-            this.SelectedTour.setTransportType(transportType);
-            if (name.isBlank()) {
-                showError("Invalid input", "name can't be empty");
-                return;
-            }
-            if (description.isBlank()) {
-                showError("Invalid input", "Description can't be empty");
-                return;
-            }
-            if(!clickedFromSuggestion.equals(from) || !clickedToSuggestion.equals(to) || from.isBlank() || to.isBlank()){
-                showError("Invalid input", "from and to must be values from the list");
-                return;
-            }
-
-            manager.editTour(this.SelectedTour);
-            // Close the window
-            Stage stage = (Stage) NewTourSubmit.getScene().getWindow();
-            stage.close();
+        } catch (Exception e) {
+            showError("Invalid input", e.getMessage());
         }
     }
+
     private void showError(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
