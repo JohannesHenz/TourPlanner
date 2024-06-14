@@ -23,62 +23,104 @@ import java.util.regex.Matcher;
 
 
 public class PDFHandler {
-    public void createPDF(Tour tour, List<TourLogs> tourLogs, String dest) {
+    public void createSummarizedPDF(List<Tour> tourlist, List<TourLogs> tourLogs, String dest) {
         try {
             PdfWriter pdfWriter = new PdfWriter(dest);
             PdfDocument pdfDocument = new PdfDocument(pdfWriter);
             Document document = new Document(pdfDocument);
-            Paragraph headline = new Paragraph("Tour Report")
+            Paragraph headline = new Paragraph("Tour Report Summary")
                     .setFontSize(18)
                     .setBold()
                     .setMarginBottom(20);
             document.add(headline);
-            document.add(new Paragraph("Name: " + tour.getName()));
-            document.add(new Paragraph("Description: " + tour.getDescription()));
-            document.add(new Paragraph("From: " + tour.getFromLocation()));
-            document.add(new Paragraph("To: " + tour.getToLocation()));
-            document.add(new Paragraph("Transport Type: " + tour.getTransportType()));
-            document.add(new Paragraph("Distance: " + tour.getDistance()));
-            document.add(new Paragraph("Estimated Time: " + String.format("%.0f",tour.getEstimatedTime())));
-            document.add(new Paragraph("Popularity: " +  String.format("%.0f",tour.getPopularity())));
-            document.add(new Paragraph("Child Friendliness: " +  String.format("%.1f",tour.getChildFriendliness())));
-            document.add(new Paragraph("\n"));
-
-            // Add tour logs
-            document.add(new Paragraph("Tour Logs"));
-
-            // Create table for logs
-            Table table = new Table(UnitValue.createPercentArray(new float[]{2, 2, 2, 1, 1, 1, 1}));
-            table.setWidth(UnitValue.createPercentValue(100));
-            table.addHeaderCell("Date");
-            table.addHeaderCell("Time");
-            table.addHeaderCell("Comment");
-            table.addHeaderCell("Difficulty");
-            table.addHeaderCell("Total Distance");
-            table.addHeaderCell("Total Time");
-            table.addHeaderCell("Rating");
-
-            for (TourLogs log : tourLogs) {
-                table.addCell(log.getDate().toString());
-                table.addCell(String.format("%.0f",log.getTime()));
-                table.addCell(log.getComment());
-                table.addCell(String.format("%.0f",log.getDifficulty()));
-                table.addCell(String.format("%.1f",log.getTotalDistance()));
-                table.addCell(String.format("%.0f",log.getTotalTime()));
-                table.addCell( String.format("%.0f",log.getRating()));
+            for (Tour tour : tourlist) {
+                document.add(new Paragraph("Name: " + tour.getName()));
+                float timeSum = 0;
+                float distanceSum = 0;
+                float ratingSum = 0;
+                int entryCount = 0;
+                for (TourLogs log : tourLogs) {
+                    if (log.getTourId() == tour.getId()) {
+                        ++entryCount;
+                        timeSum += log.getTotalTime();
+                        distanceSum += log.getTotalDistance();
+                        ratingSum += log.getRating();
+                    }
+                }
+                if (entryCount > 0) {
+                    document.add(new Paragraph("Average Total Time: " + String.format("%.2f", timeSum / entryCount)));
+                    document.add(new Paragraph("Average Total Distance: " + String.format("%.2f", distanceSum / entryCount)));
+                    document.add(new Paragraph("Average Total Rating: " + String.format("%.2f", ratingSum / entryCount)));
+                }
+                else{
+                    document.add(new Paragraph("There are no Logs available for this Tour."));
+                }
+                document.add(new Paragraph("\n"));
             }
-
-            document.add(table);
-
             // Close document
             document.close();
 
             System.out.println("PDF created successfully");
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    };
 
+
+    public void createPDF(Tour tour, List<TourLogs> tourLogs, String dest){
+            try {
+                PdfWriter pdfWriter = new PdfWriter(dest);
+                PdfDocument pdfDocument = new PdfDocument(pdfWriter);
+                Document document = new Document(pdfDocument);
+                Paragraph headline = new Paragraph("Tour Report")
+                        .setFontSize(18)
+                        .setBold()
+                        .setMarginBottom(20);
+                document.add(headline);
+                document.add(new Paragraph("Name: " + tour.getName()));
+                document.add(new Paragraph("Description: " + tour.getDescription()));
+                document.add(new Paragraph("From: " + tour.getFromLocation()));
+                document.add(new Paragraph("To: " + tour.getToLocation()));
+                document.add(new Paragraph("Transport Type: " + tour.getTransportType()));
+                document.add(new Paragraph("Distance: " + tour.getDistance()));
+                document.add(new Paragraph("Estimated Time: " + String.format("%.0f", tour.getEstimatedTime())));
+                document.add(new Paragraph("Popularity: " + String.format("%.0f", tour.getPopularity())));
+                document.add(new Paragraph("Child Friendliness: " + String.format("%.1f", tour.getChildFriendliness())));
+                document.add(new Paragraph("\n"));
+
+                // Add tour logs
+                document.add(new Paragraph("Tour Logs"));
+
+                // Create table for logs
+                Table table = new Table(UnitValue.createPercentArray(new float[]{2, 2, 2, 1, 1, 1, 1}));
+                table.setWidth(UnitValue.createPercentValue(100));
+                table.addHeaderCell("Date");
+                table.addHeaderCell("Time");
+                table.addHeaderCell("Comment");
+                table.addHeaderCell("Difficulty");
+                table.addHeaderCell("Total Distance");
+                table.addHeaderCell("Total Time");
+                table.addHeaderCell("Rating");
+
+                for (TourLogs log : tourLogs) {
+                    table.addCell(log.getDate().toString());
+                    table.addCell(String.format("%.0f", log.getTime()));
+                    table.addCell(log.getComment());
+                    table.addCell(String.format("%.0f", log.getDifficulty()));
+                    table.addCell(String.format("%.1f", log.getTotalDistance()));
+                    table.addCell(String.format("%.0f", log.getTotalTime()));
+                    table.addCell(String.format("%.0f", log.getRating()));
+                }
+
+                document.add(table);
+
+                // Close document
+                document.close();
+
+                System.out.println("PDF created successfully");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
     };
     public static Tour readPDF(String filePath) {
         Tour tour = null;

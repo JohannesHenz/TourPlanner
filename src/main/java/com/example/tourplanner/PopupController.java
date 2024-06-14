@@ -70,6 +70,9 @@ public class PopupController {
             clickedToSuggestion = SelectedTour.getToLocation();
             header.setText("Edit a Tour");
         }
+        else{
+            TransportTypeField.setValue("car");
+        }
 
 
         FromField.addEventHandler(KeyEvent.KEY_RELEASED, event -> fetchSuggestions(FromField.getText(), fromSuggestions));
@@ -155,11 +158,16 @@ public class PopupController {
             this.SelectedTour.setFromLocation(from);
             this.SelectedTour.setToLocation(to);
             this.SelectedTour.setTransportType(transportType);
-            if (name == null || name.isEmpty() || description == null) {
+
+            if (name.isBlank()) {
                 showError("Invalid input", "name can't be empty");
                 return;
             }
-            if(!clickedFromSuggestion.equals(from) || !clickedToSuggestion.equals(to)){
+            if (description.isBlank()) {
+                showError("Invalid input", "Description can't be empty");
+                return;
+            }
+            if(!clickedFromSuggestion.equals(from) || !clickedToSuggestion.equals(to) || from.isBlank() || to.isBlank()){
                 showError("Invalid input", "from and to must be values from the list");
                 return;
             }
@@ -180,14 +188,19 @@ public class PopupController {
             this.SelectedTour.setFromLocation(from);
             this.SelectedTour.setToLocation(to);
             this.SelectedTour.setTransportType(transportType);
-            if (name == null || name.isEmpty() || description == null) {
+            if (name.isBlank()) {
                 showError("Invalid input", "name can't be empty");
                 return;
             }
-            if(!clickedFromSuggestion.equals(from) || !clickedToSuggestion.equals(to)){
+            if (description.isBlank()) {
+                showError("Invalid input", "Description can't be empty");
+                return;
+            }
+            if(!clickedFromSuggestion.equals(from) || !clickedToSuggestion.equals(to) || from.isBlank() || to.isBlank()){
                 showError("Invalid input", "from and to must be values from the list");
                 return;
             }
+
             manager.editTour(this.SelectedTour);
             // Close the window
             Stage stage = (Stage) NewTourSubmit.getScene().getWindow();

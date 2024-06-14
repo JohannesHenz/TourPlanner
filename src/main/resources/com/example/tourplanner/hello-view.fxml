@@ -31,6 +31,7 @@
                     <items>
                         <MenuItem fx:id="OpenPDF" onAction="#onOpenPDFButtonClick" text="Open" />
                         <MenuItem fx:id="SafePDF" onAction="#onSavePDFButtonClick" text="Save" />
+                        <MenuItem fx:id="SafeSummaryPDF" onAction="#onSaveSummaryPDFButtonClick" text="SaveSummary" />
                     </items>
                 </Menu>
             </menus>

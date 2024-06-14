@@ -61,6 +61,8 @@ public class HelloController {
     private MenuItem OpenPDF;
     @FXML
     private MenuItem SavePDF;
+    @FXML
+    private MenuItem SaveSummaryPDF;
 
     public Tour getSelectedTour(){
         return selectedTour.get();
@@ -349,6 +351,27 @@ public class HelloController {
 
         if (file != null) {
             Tour newTour = PDFHandler.readPDF(file.getAbsolutePath());
+        }
+    };
+    @FXML
+    protected void onSaveSummaryPDFButtonClick() {
+
+        // Get corresponding tour logs for the selected tour
+        List<TourLogs> LogList = new ArrayList<>(logManager.getTourLogs());
+        List<Tour> TmpTourList = new ArrayList<>(tourList.getItems());
+        // Open a file chooser to save the PDF
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Summary PDF");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
+        );
+
+        File file = fileChooser.showSaveDialog(tourList.getScene().getWindow());
+        if (file != null) {
+            // Call PDFGenerator to create the PDF
+            PDFHandler pdfGenerator = new PDFHandler();
+
+            pdfGenerator.createSummarizedPDF(TmpTourList, LogList, file.getAbsolutePath());
         }
     };
 }
