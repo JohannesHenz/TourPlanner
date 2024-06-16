@@ -215,7 +215,7 @@ public class PDFHandler {
                     log.setTotalDistance(totalDistance);
                     log.setTotalTime(totalTime);
                     log.setRating(rating);
-                    log.setId(TourLogManager.getInstance().getNewLogID());
+                    log.setLogId(TourLogManager.getInstance().getNewLogID());
                     log.setTour(tour);
                     log.setTourId(tour.getId());
 

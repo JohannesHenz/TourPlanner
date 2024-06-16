@@ -87,7 +87,7 @@ public class LogViewModel {
         if (isEdit.get()) {
             logManager.editTourLog(log);
         } else {
-            log.setId(logManager.getNewLogID());
+            log.setLogId(logManager.getNewLogID());
             logManager.addTourLog(log);
         }
 

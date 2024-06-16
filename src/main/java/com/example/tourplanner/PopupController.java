@@ -43,7 +43,7 @@ public class PopupController {
         TransportTypeField.valueProperty().bindBidirectional(viewModel.transportTypeProperty());
         fromSuggestions.itemsProperty().bind(viewModel.fromSuggestionsProperty());
         toSuggestions.itemsProperty().bind(viewModel.toSuggestionsProperty());
-        TransportTypeField.setItems(FXCollections.observableArrayList("car", "bike", "walking"));
+        TransportTypeField.setItems(FXCollections.observableArrayList("driving-car", "cycling-regular", "foot-walking"));
     }
 
     public void initData(Tour tour, boolean isEdit) {

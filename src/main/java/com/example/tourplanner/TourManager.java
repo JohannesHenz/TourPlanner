@@ -29,11 +29,6 @@ public class TourManager {
                             backendService.AddTourPOST(tour);
                     }
                 }
-                if (change.wasRemoved()) {
-                    for (Tour tour : change.getAddedSubList()) {
-                            backendService.DeleteTourDELETE(tour);
-                    }
-                }
             }
         }
         );
@@ -76,6 +71,8 @@ public class TourManager {
 
     public void deleteTour(Tour tourToDelete) {
         tours.remove(tourToDelete);
+        BackendService backendService = BackendService.getInstance();
+        backendService.DeleteTourDELETE(tourToDelete);
     }
 
     public String getNewID(){
@@ -97,6 +94,7 @@ public class TourManager {
     public ObservableList<Tour> getTours() {
         return tours;
     }
+
     public Tour getById(String id) {
         for (Tour tour : tours) {
             if (tour.getId().equals(id)) {

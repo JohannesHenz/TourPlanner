@@ -17,13 +17,21 @@ public class Tour {
     private String transportType;
     private double distance;
     private double estimatedTime;
-    @JsonIgnore
+    private String mapImageUrl;
     private double popularity;
     @JsonIgnore
     private double childFriendliness;
     private List<TourLogs> tourLogs;
 
     //private Image routeInformation;
+
+    public String getMapImageUrl() {
+        return mapImageUrl;
+    }
+
+    public void setMapImageUrl(String mapImageUrl) {
+        this.mapImageUrl = mapImageUrl;
+    }
 
     public Tour(){ //braucht leeren constructor für databind
     };

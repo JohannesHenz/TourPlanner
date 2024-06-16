@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class TourLogs {
-    private String id;
+    private String LogId;
     @JsonIgnore
     private Tour tour;
     private String TourId;
@@ -26,12 +26,12 @@ public class TourLogs {
         TourId = tourId;
     }
 
-    public String getId() {
-        return id;
+    public String getLogId() {
+        return LogId;
     }
 
-    public void setId(String logId) {
-        id = logId;
+    public void setLogId(String logId) {
+        LogId = logId;
     }
 
     public Tour getTour() {

@@ -25,11 +25,6 @@ public class TourLogManager {
                         backendService.AddTourLogPOST(log);
                     }
                 }
-                if (change.wasRemoved()) {
-                    for (TourLogs log: change.getAddedSubList()) {
-                        backendService.DeleteTourLogDELETE(log);
-                    }
-                }
             }
         });
     }
@@ -52,7 +47,7 @@ public class TourLogManager {
 
     public void editTourLog(TourLogs editedTourLog) {
         for (int i = 0; i < tourLogs.size(); i++) {
-            if (tourLogs.get(i).getId().equals(editedTourLog.getId())) {
+            if (tourLogs.get(i).getLogId().equals(editedTourLog.getLogId())) {
                 tourLogs.get(i).setDate(editedTourLog.getDate());
                 tourLogs.get(i).setTime(editedTourLog.getTime());
                 tourLogs.get(i).setComment(editedTourLog.getComment());
@@ -60,7 +55,7 @@ public class TourLogManager {
                 tourLogs.get(i).setTotalDistance(editedTourLog.getTotalDistance());
                 tourLogs.get(i).setTotalTime(editedTourLog.getTotalTime());
                 tourLogs.get(i).setRating(editedTourLog.getRating());
-                System.out.println("TourLog Edited: " + editedTourLog.getId());
+                System.out.println("TourLog Edited: " + editedTourLog.getLogId());
                 BackendService backendService = BackendService.getInstance();
                 backendService.EditTourLogPUT(editedTourLog);
                 return; // Exit the method once the replacement is done
@@ -68,8 +63,19 @@ public class TourLogManager {
         }
     }
 
+    public TourLogs getById(String id){
+        for (TourLogs log : tourLogs) {
+            if (log.getLogId().equals(id)) {
+                return log;
+            }
+        }
+        return null; // If no tour with matching ID is found
+    }
+
     public void deleteTourLog(TourLogs tourLogToDelete) {
         tourLogs.remove(tourLogToDelete);
+        BackendService backendService = BackendService.getInstance();
+        backendService.DeleteTourLogDELETE(tourLogToDelete);
     }
 
     public String getNewLogID(){
@@ -79,7 +85,7 @@ public class TourLogManager {
             id = UUID.randomUUID().toString();
             isUnique = true;
             for (TourLogs log : tourLogs) {
-                if (log.getId().equals(id)) {
+                if (log.getLogId().equals(id)) {
                     isUnique = false;
                     break;
                 }

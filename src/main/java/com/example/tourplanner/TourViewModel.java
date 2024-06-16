@@ -1,5 +1,6 @@
 package com.example.tourplanner;
 
+import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,7 +21,7 @@ public class TourViewModel {
     private StringProperty description = new SimpleStringProperty();
     private StringProperty fromLocation = new SimpleStringProperty();
     private StringProperty toLocation = new SimpleStringProperty();
-    private StringProperty transportType = new SimpleStringProperty("car");
+    private StringProperty transportType = new SimpleStringProperty("driving-car");
     private BooleanProperty editMode = new SimpleBooleanProperty(false);
     private ObjectProperty<Tour> selectedTour = new SimpleObjectProperty<>();
     private ListProperty<String> fromSuggestions = new SimpleListProperty<>(FXCollections.observableArrayList());
@@ -51,7 +52,7 @@ public class TourViewModel {
             editMode.set(true);
         } else {
             editMode.set(false);
-            transportType.set("car");
+            transportType.set("driving-car");
         }
     }
 
@@ -121,7 +122,9 @@ public class TourViewModel {
             client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(HttpResponse::body)
                     .thenApply(this::parseSuggestions)
-                    .thenAccept(s -> suggestions.setAll(s));
+                    .thenAcceptAsync(s -> {
+                        Platform.runLater(() -> suggestions.setAll(FXCollections.observableArrayList(s)));
+                    });
         } catch (Exception e) {
             e.printStackTrace();
         }

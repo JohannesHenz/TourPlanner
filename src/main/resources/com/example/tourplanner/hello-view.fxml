@@ -100,9 +100,6 @@
                      </children>
                   </Pane>
                </content></Tab>
-                <Tab text="Misc">
-                    <!-- Misc content -->
-                </Tab>
             </tabs>
         </TabPane>
     </center>
