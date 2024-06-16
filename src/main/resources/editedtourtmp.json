@@ -1,1 +1,1 @@
-{"name":"d","description":"d","fromLocation":"Versai, Beirut, Lebanon","toLocation":"Paris, France","transportType":"driving-car","distance":218178.3,"estimatedTime":8475.3,"mapImageUrl":null,"tourLogs":null}
+{"name":"Updated Test Tour","description":"Description","fromLocation":"Location A","toLocation":"Location B","transportType":"Car","distance":10000.0,"estimatedTime":3600.0,"mapImageUrl":null,"tourLogs":null}

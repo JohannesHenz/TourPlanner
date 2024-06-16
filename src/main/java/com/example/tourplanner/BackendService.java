@@ -418,4 +418,7 @@ public class BackendService {
             e.printStackTrace();
         }
     }
+
+    public void setHttpClient(HttpClient httpClient) {
+    }
 }

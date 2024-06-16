@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
 
 public class PopupController {
-    private TourViewModel viewModel = new TourViewModel();
+    public TourViewModel viewModel = new TourViewModel();
 
     @FXML
     private TextField NameField;

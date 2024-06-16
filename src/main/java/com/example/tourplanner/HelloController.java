@@ -22,7 +22,6 @@ import javafx.stage.FileChooser;
 import java.time.LocalDate;
 
 public class HelloController {
-    private static final HelloController instance = new HelloController();
     private TourManager manager = TourManager.getInstance();
     private TourLogManager logManager = TourLogManager.getInstance();
     private ImageManager imgManager = ImageManager.getInstance();
@@ -114,9 +113,6 @@ public class HelloController {
         LogSearch.textProperty().addListener((observable, oldValue, newValue) -> filterTourLogList());
     }
 
-    public static HelloController getInstance() {
-        return instance;
-    }
 
     @FXML
     public void updateLogList(){
