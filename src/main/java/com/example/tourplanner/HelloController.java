@@ -222,7 +222,16 @@ public class HelloController {
 
     @FXML
     protected String getTourInfo(){
-        return "Name:\t\t\t\t"+selectedTour.getValue().getName()+"\nDescription:\t\t\t"+selectedTour.getValue().getDescription()+"\nFrom:\t\t\t\t"+selectedTour.getValue().getFromLocation()+"\nTo:\t\t\t\t\t"+selectedTour.getValue().getToLocation()+"\nTransport Type:\t\t"+selectedTour.getValue().getTransportType()+"\nDistance:\t\t\t\t"+String.format("%.1f",selectedTour.getValue().getDistance())+"\nEstimated Time:\t\t"+String.format("%.0f",selectedTour.getValue().getEstimatedTime())+"\nPopularity: \t\t\t"+String.format("%.0f",selectedTour.getValue().getPopularity())+"\t\t\t\t\t(search for with ie pop>1)\nChild Friendliness: \t\t"+String.format("%.1f",selectedTour.getValue().getChildFriendliness())+"\t\t\t\t\t(search for with ie cf>1)";
+        return "Name:\t\t\t\t"+selectedTour.getValue().getName()+
+                "\nDescription:\t\t\t"+selectedTour.getValue().getDescription()+
+                "\nFrom:\t\t\t\t"+selectedTour.getValue().getFromLocation()+
+                "\nTo:\t\t\t\t\t"+selectedTour.getValue().getToLocation()+
+                "\nTransport Type:\t\t"+selectedTour.getValue().getTransportType()+
+                "\nDistance (in km):\t\t"+String.format("%.1f",selectedTour.getValue().getDistance()/1000)+
+                "\nEstimated Time (in h):\t"+String.format("%.0f",selectedTour.getValue().getEstimatedTime()/3600)+":"+String.format("%.0f",selectedTour.getValue().getEstimatedTime()/60%60)+
+                "\nPopularity: \t\t\t"+String.format("%.0f",selectedTour.getValue().getPopularity())+"\t\t\t\t\t(search for with ie pop>1)" +
+                "\nChild Friendliness: \t\t"+String.format("%.1f",selectedTour.getValue().getChildFriendliness())+"\t\t\t\t\t(search for with ie cf>1)" +
+                "\nAverage TourTime:\t\t"+String.format("%.0f",selectedTour.getValue().getAverageTravelTime()/3600)+":"+String.format("%.0f",selectedTour.getValue().getAverageTravelTime()/60%60);
 
     }
     @FXML

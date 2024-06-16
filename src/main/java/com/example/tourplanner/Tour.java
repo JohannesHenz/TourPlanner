@@ -74,6 +74,19 @@ public class Tour {
                         .sum()
         );
     }
+    @JsonIgnore
+    public double getAverageTravelTime(){
+        TourLogManager logManager = TourLogManager.getInstance();
+        //wir rechnen einfach tourloganzahl/schwierigkeitssumme für das inverse der durchschnittsschwierigkeit
+        return logManager.getTourLogs().stream()
+                        .filter(log -> id.equals(log.getTourId()))
+                        .mapToDouble(TourLogs::getTotalTime)
+                        .sum()
+                /
+        logManager.getTourLogs().stream()
+                .filter(log -> id.equals(log.getTourId()))
+                .count();
+    }
 
     public String getName() {
         return name;
