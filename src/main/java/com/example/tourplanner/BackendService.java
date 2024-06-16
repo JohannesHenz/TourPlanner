@@ -1,5 +1,7 @@
 package com.example.tourplanner;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -20,6 +22,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+
+import javax.imageio.ImageIO;
 
 
 public class BackendService {
@@ -77,6 +81,10 @@ public class BackendService {
 
                         }
                     }
+                }
+                //hol alle images
+                for(Tour tour : manager.getTours()){
+                    ImageGET(tour.getId());
                 }
             } else {
                 System.out.println("Failed to fetch tours. HTTP error code: " + response.statusCode());
@@ -144,6 +152,7 @@ public class BackendService {
                     manager.getById(tour.getId()).setDistance(tmptour.getDistance());
                     manager.getById(tour.getId()).setEstimatedTime(tmptour.getEstimatedTime());
                     manager.getById(tour.getId()).setId(tmptour.getId());
+                    ImageGET(tmptour.getId());
                 } else {
                     System.out.println("Failed to post tour. HTTP error code: " + response.statusCode());
                 }
@@ -254,10 +263,12 @@ public class BackendService {
                 String responseBody = response.body();
                 System.out.println("Response JSON: " + responseBody);
                 //speihern die Tour zwischen
-                Tour tmptour = objectMapper.readValue(responseBody, Tour.class);
+                ObjectMapper objectMapper2 = new ObjectMapper();
+                Tour tmptour = objectMapper2.readValue(responseBody, Tour.class);
                 //die Tour die wir grad editiert haben
                 manager.getById(tour.getId()).setDistance(tmptour.getDistance());
                 manager.getById(tour.getId()).setEstimatedTime(tmptour.getEstimatedTime());
+                ImageGET(tmptour.getId());
             } else {
                 System.out.println("Failed to update tour. HTTP error code: " + response.statusCode());
             }
@@ -379,7 +390,32 @@ public class BackendService {
             e.printStackTrace();
         }
     }
-    public void ImageGET(Tour tour){
+    public void ImageGET(String tourId){
+        try {
+            String url = "http://localhost:8080/api/tours/" + tourId + "/image";
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
+            // Send the request and handle the response
+            HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+            if (response.statusCode() == 200) {
+                // Read the image bytes from the response body
+                byte[] imageBytes = response.body();
 
+                // Convert byte array to BufferedImage
+                BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageBytes));
+                Image newImg = new Image(tourId, image);
+                ImageManager imgManager = ImageManager.getInstance();
+                imgManager.addImage(newImg);
+                System.out.println("Image fetched and saved successfully.");
+            } else {
+                System.out.println("Failed to fetch image. HTTP error code: " + response.statusCode());
+            }
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

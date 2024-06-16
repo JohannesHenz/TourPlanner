@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.scene.control.cell.PropertyValueFactory;
 import java.util.List;
@@ -24,7 +25,10 @@ public class HelloController {
     private static final HelloController instance = new HelloController();
     private TourManager manager = TourManager.getInstance();
     private TourLogManager logManager = TourLogManager.getInstance();
+    private ImageManager imgManager = ImageManager.getInstance();
     private HelloViewModel model = new HelloViewModel();
+    @FXML
+    private ImageView Map;
     @FXML
     private ListView<Tour> tourList;
     @FXML
@@ -79,6 +83,8 @@ public class HelloController {
             if (newValue != null) {
                 setSelectedTour(newValue);
                 updateLogList();
+                System.out.println("newval: " + newValue.getId());
+                loadTourImage(newValue.getId());
             }
         });
 
@@ -120,6 +126,17 @@ public class HelloController {
                     .collect(Collectors.toList());
             tourLogs = FXCollections.observableArrayList(filteredTourLogs);
             tourLogTable.setItems(tourLogs);
+        }
+    }
+    @FXML
+    private void loadTourImage(String tourId) {
+        try {
+            String imageUrl = "file:src/main/resources/images/image" + tourId + ".png"; // Assuming the images are stored locally
+            Image image = new Image(imageUrl);
+            Map.setImage(image);
+        } catch (Exception e) {
+            System.out.println("Failed to load image for tour ID: " + tourId);
+            e.printStackTrace();
         }
     }
 

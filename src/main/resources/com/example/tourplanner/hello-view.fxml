@@ -92,10 +92,7 @@
                <content>
                     <Pane prefHeight="329.0" prefWidth="784.0">
                      <children>
-                        <ImageView fitHeight="349.0" fitWidth="784.0" layoutX="60.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../Capture.JPG" />
-                           </image>
+                        <ImageView fx:id="Map" fitHeight="349.0" fitWidth="784.0" layoutX="60.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
                         </ImageView>
                      </children>
                   </Pane>

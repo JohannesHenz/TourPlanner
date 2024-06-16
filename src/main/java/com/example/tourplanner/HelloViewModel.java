@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 public class HelloViewModel {
     private TourManager manager = TourManager.getInstance();
     private TourLogManager logManager = TourLogManager.getInstance();
-
     public void initialize() {
 
         };

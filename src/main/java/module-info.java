@@ -9,6 +9,7 @@ module com.example.tourplanner {
     requires kernel;
     requires layout;
     requires java.logging;
+    requires java.desktop;
 
     opens com.example.tourplanner to javafx.fxml;
     exports com.example.tourplanner;
